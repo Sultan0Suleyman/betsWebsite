@@ -1,0 +1,58 @@
+header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Для управления слоем, если есть другие фиксированные элементы */
+}
+.overlay-buttons {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.overlay-buttons button {
+  margin-bottom: 8px;
+  background-color: #ffa500; /* Light orange color */
+  color: #000; /* Adjust text color to make it visible */
+  padding: 8px 40px; /* Adjust padding for the desired length */
+  border: none;
+  border-radius: 50px; /* Make the buttons oval-shaped */
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s;
+  overflow: hidden;
+}
+
+.overlay-buttons button mat-icon {
+  margin-right: 8px; /* Adjust margin for space between icon and text */
+}
+
+.overlay-buttons button span {
+  flex-grow: 1;
+  white-space: nowrap;
+  margin-left: -32px;
+  font-size: small;
+  font-style: normal;
+  font-weight: bold;
+  text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
+}
+
+.overlay-buttons button:hover {
+  background-color: #ffcc80; /* Lighter orange color on hover */
+}
+
+.coupon-count {
+  position: fixed;
+  background-color: #ec1d06;
+  color: white;
+  padding: 3px 6px;
+  border-radius: 50%;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-top: -35px;
+  right: 16px;
+}

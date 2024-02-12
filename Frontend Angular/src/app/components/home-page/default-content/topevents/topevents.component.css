@@ -1,0 +1,46 @@
+#topEvents{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #ec1d06;
+  font-weight: bolder;
+  font-size: small;
+  width: 70px;
+}
+.horizontal-scroll {
+  width: 100%; /* Ширина контейнера, занимает всю доступную ширину */
+  overflow-x: auto; /* Разрешить горизонтальную прокрутку при необходимости */
+  white-space: nowrap; /* Запрет переноса текста на новую строку */
+}
+
+/* Стили для элементов внутри горизонтальной панели */
+.item {
+  border: 2px solid #444343;
+  display: inline-block; /* Отображать элементы в строку */
+  width: 300px; /* Ширина каждого элемента */
+  height: 120px; /* Высота каждого элемента */
+  background-color: darkslategrey; /* Цвет фона элемента */
+  color: #fff; /* Цвет текста элемента */
+  margin-right: 10px; /* Отступ между элементами */
+  text-align: center;
+  padding: 10px;
+  overflow: hidden; /* Ограничиваем видимую область блока */
+}
+.nameOfEvent{
+  margin: 0;
+  font-family: Arial, serif;
+  color: sandybrown;
+  font-size: large;
+}
+.coefficient{
+  display: inline;
+  padding: 20px;
+  border: 1px solid lightslategray;
+  font-weight: bold;
+
+}
+.dateEvent{
+  color: cornsilk;
+}
+.coefficient:hover{
+  background-color: darkgreen ;
+}

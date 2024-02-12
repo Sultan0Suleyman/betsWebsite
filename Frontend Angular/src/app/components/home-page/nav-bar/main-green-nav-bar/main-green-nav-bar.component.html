@@ -1,0 +1,48 @@
+<nav class="navbar2 allow-select" >
+  <div class="posSetLeft2 ">
+    <ul>
+      <li><a href="#">Sobol<span>BET</span></a></li>
+    </ul>
+  </div>
+  <div class="posSetCenter2">
+    <ul>
+      <li><a href="#">Line</a></li>
+      <li><a href="#">Live</a></li>
+      <li><a href="#">Search</a></li>
+    </ul>
+  </div>
+  <div class="posSetRight2" *ngIf="!this.authService.isAuthenticated(); else authBlock">
+    <ul>
+      <li><a routerLink="/player/registration">Register</a></li>
+      <li><a id="loginBtn" routerLink="/player/login">Sign up</a></li>
+    </ul>
+  </div>
+  <ng-template #authBlock>
+    <div class="posSetRight2">
+      <ul>
+        <li>
+          <button class="player-id-button dropdown-button">
+            {{playerId}}
+            <div class="dropdown-content">
+              <a (click)="onBetHistoryClicked()">Bet history</a>
+              <a (click) = "this.authService.logout()">Logout</a>
+              <!-- Добавьте нужные опции в выпадающее меню -->
+            </div>
+          </button>
+        </li>
+        <li class="balance-container">
+          <span class="balance-label">Balance:</span>
+          <span class="balance-amount">{{playerBalance}}€</span>
+          <button class="refresh-button" (click)="refreshBalance()">↻</button>
+        </li>
+        <li>
+          <a class="action-button" routerLink="/player/top-up">Top up</a>
+        </li>
+        <li>
+          <a class="action-button" routerLink="/player/withdraw">Withdraw</a>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+
+</nav>

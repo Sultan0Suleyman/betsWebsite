@@ -1,0 +1,30 @@
+<div class="sidebar">
+  <nav class="scrolling-menu allow-select">
+    <ul>
+      <li id="mainLogSport">Sport:</li>
+      <br>
+      <li *ngFor="let sport of listOfSports">
+        <div class="sport-item" (click)="onSportClick(sport)">
+          {{ sport }}
+          <span *ngIf="selectedSport === sport">&#x25BC;</span>
+        </div>
+        <ul *ngIf="selectedSport === sport">
+          <p *ngIf ="noMatchesMessage" class="message">{{noMatchesMessage}}</p>
+          <li *ngFor="let country of getCountriesForSport(sport)">
+            <div class="country-item" (click)="onCountryClick(country, sport)">
+              {{ country }}
+              <span *ngIf="shouldShowArrow && selectedCountry === country">&#x25BC;</span>
+            </div>
+            <ul *ngIf="selectedCountry === country">
+              <li *ngFor="let league of getLeaguesForCountrySport(country, sport)">
+                <div class="league-item" (click)="onLeagueClick(league, country, sport)">
+                  {{ league }}
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</div>

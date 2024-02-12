@@ -1,0 +1,33 @@
+header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Для управления слоем, если есть другие фиксированные элементы */
+}
+input,label{
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.registrationMain{
+  position: absolute;
+  top: 163px;
+  right: 550px;
+  height: 450px;
+  width: 500px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+p{
+  margin: 0;
+  padding: 0;
+  color:red;
+}
+button{
+  padding-top: 0;
+}
+

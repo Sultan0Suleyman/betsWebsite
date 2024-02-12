@@ -1,0 +1,23 @@
+.bewerbung{
+  width: 1195.200px; /* Ширина контейнера */
+  height: 209.250px; /* Высота контейнера */
+
+}
+.bewerbung img{
+  width: 100%;
+}
+.newsChanger{
+  position: absolute;
+  top: 213px;
+  right: 10px;
+  height: 50px;
+  background-color: black;
+  color: white;
+  font-weight: bolder;
+  font-size: large;
+  visibility: hidden;
+}
+.visibleButton{
+  visibility: visible;
+}
+

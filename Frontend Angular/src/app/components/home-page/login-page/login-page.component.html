@@ -1,0 +1,25 @@
+<header>
+  <app-dark-additional-nav-bar></app-dark-additional-nav-bar>
+  <app-green-empty-nav-bar></app-green-empty-nav-bar>
+</header>
+<div class="loginMain">
+  <h2>Sign up</h2>
+  <form [formGroup]="myForm" (ngSubmit)="submitForm()">
+    <label for="username">Login:</label><br>
+    <input type="text" id="username" formControlName="username" autocomplete="current-username" >
+    <br>
+    <label for="password">Enter the password:</label><br>
+    <input type="password" id="password" formControlName="password" autocomplete="current-password">
+    <br>
+    <p id="mainValidator" *ngIf="myForm.invalid&&myForm.get('login')?.dirty&&myForm.get('password')?.dirty">
+      Wrong login or password</p>
+    <label>
+      <input type="checkbox" formControlName="rememberMe"> Remember Me
+    </label>
+    <br>
+    <button (click)="printForm()" type="submit" [disabled]="!myForm.valid">Submit</button>
+  </form>
+  <div id="date">
+    <p *ngIf="submitChecker">{{errorMessage}}</p>
+  </div>
+</div>

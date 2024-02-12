@@ -1,0 +1,75 @@
+<div class="content">
+  <p>{{ message }}</p>
+  <h2>Unsettled Bets</h2>
+  <ul *ngIf="unsettledBets.length > 0">
+    <li class="cursorPointerLi" *ngFor="let fullBet of unsettledBets" (click)="onBetClick(fullBet.id, fullBet.betAmount)">
+      ID: {{ fullBet.id }} - {{ fullBet.betAmount }}€ - {{ fullBet.finalCoefficient }} -
+      {{ fullBet.countOfOrdinaryBets === 1 ? 'Single bet' : 'Express' }}
+      - <span class="moneyOutcome">Possible win: {{ (fullBet.betAmount * fullBet.finalCoefficient) | number: '1.2-2' }}€</span>
+      <!-- Вложенный список для ordinaryBets -->
+      <ul *ngIf="parentBetId === fullBet.id">
+        <li class="cursorDefaultLi bgOrdinary" *ngFor="let ordinaryBet of ordinaryBets">
+          {{ ordinaryBet.teamHome }} vs {{ ordinaryBet.teamAway }} - {{ ordinaryBet.dateOfMatch | date: 'medium' }}
+          - {{ ordinaryBet.outcomeOfTheGame }}
+          - {{ ordinaryBet.coefficient }} -
+          <span [ngStyle]="{
+    'color': ordinaryBet.winningBet === null && !ordinaryBet.isGameEnded ? 'orange' :
+             (ordinaryBet.winningBet === null && ordinaryBet.isGameEnded ? 'green' :
+               (ordinaryBet.winningBet === true && ordinaryBet.isGameEnded ? 'green' :
+                 (ordinaryBet.winningBet === false && ordinaryBet.isGameEnded ? 'red' : 'black')))
+  }">
+    {{ ordinaryBet.winningBet === null && !ordinaryBet.isGameEnded ? 'Unsettled' :
+            (ordinaryBet.winningBet === null && ordinaryBet.isGameEnded ? 'Refund' :
+              (ordinaryBet.winningBet === true && ordinaryBet.isGameEnded ? 'Win' :
+                (ordinaryBet.winningBet === false && ordinaryBet.isGameEnded ? 'Lose' : '')))
+            }}
+  </span>
+          {{ !shouldShowButton() ? '- Live' : '' }}
+        </li>
+        <div *ngIf="shouldShowButton()">
+          <button (click)="onSellButtonClick(fullBet.id)">
+            {{ sellButtonMessage }}
+          </button>
+        </div>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>Paid Bets</h2>
+  <ul *ngIf="paidBets.length > 0">
+    <li class="cursorPointerLi" *ngFor="let fullBet of paidBets" (click)="onBetClick(fullBet.id)">
+      ID: {{ fullBet.id }} - {{ fullBet.betAmount }}€ - {{ fullBet.finalCoefficient }} -
+      {{ fullBet.countOfOrdinaryBets === 1 ? 'Single bet' : 'Express' }}
+      -
+      <span [ngStyle]="{
+    'color': fullBet.betStatus ? 'green' :
+             (fullBet.betStatus === null ? 'darkblue' :
+               (!fullBet.betStatus  ? 'red' : 'black'))
+  }">
+      {{ (fullBet.betStatus ? 'Won' : (fullBet.betStatus === null ? 'Sold' : 'Lose')) || 'Unknown' }}
+      </span>
+      - <span class="moneyOutcome">Payout: {{ fullBet.finalBetPayout }}€</span>
+
+      <ul *ngIf="parentBetId === fullBet.id">
+        <li class="cursorDefaultLi bgOrdinary" *ngFor="let ordinaryBet of ordinaryBets">
+          {{ ordinaryBet.teamHome }} vs {{ ordinaryBet.teamAway }} - {{ ordinaryBet.dateOfMatch | date: 'medium' }}
+          - {{ ordinaryBet.outcomeOfTheGame }}
+          - {{ ordinaryBet.coefficient }} -
+          <span [ngStyle]="{
+    'color': ordinaryBet.winningBet === null && !ordinaryBet.isGameEnded ? 'orange' :
+             (ordinaryBet.winningBet === null && ordinaryBet.isGameEnded ? 'green' :
+               (ordinaryBet.winningBet === true && ordinaryBet.isGameEnded ? 'green' :
+                 (ordinaryBet.winningBet === false && ordinaryBet.isGameEnded ? 'red' : 'black')))
+  }">
+    {{ ordinaryBet.winningBet === null && !ordinaryBet.isGameEnded ? 'Unsettled' :
+          (ordinaryBet.winningBet === null && ordinaryBet.isGameEnded ? 'Refund' :
+            (ordinaryBet.winningBet === true && ordinaryBet.isGameEnded ? 'Win' :
+              (ordinaryBet.winningBet === false && ordinaryBet.isGameEnded ? 'Lose' : '')))
+          }}
+  </span>
+          {{ (ordinaryBet.dateOfMatch > getCurrentDate() && !ordinaryBet.isGameEnded) ? '- Live' : '' }}
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

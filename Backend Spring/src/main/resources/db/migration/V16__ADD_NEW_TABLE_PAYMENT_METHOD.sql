@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS payment_method(
+    name_en VARCHAR(255) PRIMARY KEY
+)

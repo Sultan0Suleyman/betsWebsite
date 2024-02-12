@@ -1,0 +1,82 @@
+.content {
+  margin-left: 300px;
+  margin-top: 116px;
+  padding: 20px;
+}
+
+.game-container {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.game-info {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333; /* Set the text color to a darker shade */
+}
+
+.game-info p {
+  margin: 5px 0; /* Adjust the margin for better spacing */
+}
+
+.game-info p:first-child {
+  font-size: 18px; /* Increase font size for the date */
+}
+
+.game-info p:last-child {
+  font-size: 16px; /* Decrease font size for the team names */
+  color: #555; /* Set a slightly darker color for the team names */
+}
+
+.odds-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Позволяет элементам переноситься на следующую строку при нехватке места */
+}
+
+.odds {
+  padding: 8px;
+  margin: 0;
+  margin-bottom: 10px; /* Добавим отступ снизу для создания промежутка между ставками */
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Стили для первых трех ставок (слева) */
+.odds.left {
+  flex: 1; /* Занимает всю доступную ширину на текущей строке */
+}
+
+/* Стили для последних двух ставок (справа) */
+.odds.right {
+  flex: 1; /* Занимает всю доступную ширину на текущей строке */
+}
+
+.stake-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.stake-button:hover {
+  background-color: #2980b9;
+}
+.odds:hover, .odds-clickable {
+  background-color: #45a049;
+}
+
+

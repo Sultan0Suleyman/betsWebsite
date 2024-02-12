@@ -1,0 +1,12 @@
+<div class="content" *ngIf="gameBetsData">
+  <div class="game-info">
+    <p><strong>Date of Match:</strong> {{ gameBetsData.dateOfMatch | date: 'medium' }}</p>
+    <p><strong>Teams:</strong> {{ gameBetsData.teamHome }} vs {{ gameBetsData.teamAway }}</p>
+  </div>
+
+  <div class="bets-container" *ngIf="gameBetsData.bets">
+    <div *ngFor="let bet of gameBetsData.bets" class="bet" (click)="this.couponService.handleBetClick(bet,gameBetsData)">
+      <p><strong>{{ bet.type }}:</strong> {{ bet.value }}</p>
+    </div>
+  </div>
+</div>

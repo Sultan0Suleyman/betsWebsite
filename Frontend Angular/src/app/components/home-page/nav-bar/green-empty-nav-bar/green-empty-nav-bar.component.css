@@ -1,0 +1,33 @@
+.navbar2{
+  background-color: forestgreen;
+  display: flex;
+  justify-content: space-between; /* Равномерно распределить элементы по ширине */
+  align-items: center; /* Выровнять элементы по вертикали */
+}
+.posSetLeft2 a{
+  color: white;
+  font-size: x-large;
+  margin-left: 30px;
+  font-weight: bold;
+  font-family: "Arial Black", serif;
+}
+
+.posSetLeft2 a span{
+  color:yellow;
+}
+.navbar2 a{
+  color: white;
+}
+.navbar2 li{
+  display: inline;
+  margin-right: 20px; /* Отступ между пунктами меню */
+}
+.navbar2 a{
+  text-decoration: none;
+}
+navbar2 ul{
+  list-style-type: none; /* Убираем маркеры списка */
+  padding: 0;
+}
+
+

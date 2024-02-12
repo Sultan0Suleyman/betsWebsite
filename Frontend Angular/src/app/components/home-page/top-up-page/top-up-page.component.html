@@ -1,0 +1,39 @@
+<app-dark-additional-nav-bar></app-dark-additional-nav-bar>
+<app-green-empty-nav-bar></app-green-empty-nav-bar>
+<div class="top-up-container">
+  <h2>Top Up Your Account</h2>
+
+  <div class="amount-input-container">
+    <label for="amount">Enter Amount (€):</label>
+    <input type="number" id="amount" name="amount" placeholder="Enter the amount" min="0" [(ngModel)]="amount">
+  </div>
+  <div class="payment-method-container">
+    <label for="paymentMethod">Choose payment method:</label>
+    <select id="paymentMethod" name="paymentMethod" [(ngModel)]="selectedPaymentMethod">
+      <option value="" disabled selected>Choose payment method</option>
+      <option *ngFor="let method of paymentMethods" [value]="method">{{ method }}</option>
+    </select>
+  </div>
+  <p class="success">{{ message }}</p>
+  <p class="error">{{ errorMessage }}</p>
+  <button class="top-up-button" (click)="topUp()">Top Up</button>
+  <button class="history-button" (click)="toggleHistory()">History of Refills</button>
+
+  <!-- Блок с историей пополнений -->
+  <div *ngIf="showHistory" class="history-container">
+    <h3>History of Refills</h3>
+    <div *ngFor="let refill of refillHistory" class="history-item">
+      <div class="refill-info">
+        <p><strong>ID:</strong> {{ refill.id }}</p>
+        <p><strong>Replenishment Amount (€):</strong> {{ refill.replenishmentAmount }}</p>
+        <p><strong>Payment method:</strong> {{ refill.paymentMethod.name_en}}</p>
+        <p><strong>Date of Refill:</strong> {{ refill.dateOfRefill | date: 'yyyy-MM-dd HH:mm:ss' }}</p>
+        <p><strong>Payment status:</strong>
+          <span [ngClass]="{'success': refill.paymentSuccessful, 'failure': !refill.paymentSuccessful}">
+          {{ refill.paymentSuccessful ? 'Successful' : 'Failure' }}
+        </span>
+        </p>
+      </div>
+    </div>
+</div>
+</div>

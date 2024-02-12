@@ -1,0 +1,41 @@
+.content {
+  margin-left: 300px;
+  margin-top: 116px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.game-info {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: yellow;
+
+}
+
+.game-info p {
+  margin: 8px 0; /* Добавим немного отступа сверху и снизу между параграфами */
+}
+
+.game-info strong {
+  color: white; /* Цвет для жирного текста (названия и даты) */
+}
+
+.bets-container {
+  margin-bottom: 20px;
+}
+
+.bet {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background-color: darkslategrey;
+  transition: background-color 0.3s;
+}
+
+.bet:hover {
+  background-color: #eaeaea;
+}

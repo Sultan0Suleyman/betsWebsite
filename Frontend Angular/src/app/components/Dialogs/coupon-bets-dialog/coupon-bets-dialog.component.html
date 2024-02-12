@@ -1,0 +1,25 @@
+<div *ngIf="couponBets.length > 0; else emptyCoupon" class="coupon-container">
+  <p class="coupon-header"><strong>Coupon Bets:</strong> <span class="bet-count">{{ couponBets.length }}</span></p>
+  <ul>
+    <li *ngFor="let bet of couponBets" class="bet">
+      <div class="bet-info">
+        <p><strong>Match:</strong> {{ bet.teamHome }} vs {{ bet.teamAway }} ({{ bet.dateOfMatch | date: 'medium' }})</p>
+        <p><strong>{{ bet.type }}:</strong> {{ bet.value }}</p>
+      </div>
+      <button class="remove-button" (click)="this.couponService.removeBet(bet)">Remove</button>
+    </li>
+  </ul>
+  <div class="betting-section">
+    <label for="betAmount">Bet Amount:</label>
+    <input id="betAmount" type="number" [(ngModel)]="betAmount" min="0" (keypress)="onKeyPress($event)"/>
+    <button (click)="makeBet()">Place a Bet</button>
+    <p class="success">{{ message }}</p>
+    <p class="error">{{ errorMessage }}</p>
+    <p>Total Odds: {{ totalOdds | number: '1.2-2' }}</p>
+    <p>Possible Win: {{ possibleWin | number: '1.2-2' }}€</p>
+  </div>
+</div>
+
+<ng-template #emptyCoupon>
+  <p class="empty-coupon-message">Coupon is empty.</p>
+</ng-template>

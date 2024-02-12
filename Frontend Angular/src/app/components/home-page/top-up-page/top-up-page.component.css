@@ -1,0 +1,118 @@
+.top-up-container {
+  max-width: 400px;
+  padding: 20px;
+  margin: 10px auto 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.amount-input-container {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.top-up-button {
+  background-color: forestgreen;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.top-up-button:hover {
+  background-color: darkgreen;
+}
+.payment-method-container {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Оформление для выбранного метода оплаты */
+.payment-method-container select:focus {
+  outline: none;
+  border-color: aquamarine;
+  box-shadow: 0 0 5px rgba(0, 128, 128, 0.5);
+}
+
+.history-button {
+  background-color: steelblue; /* Цвет фона кнопки */
+  color: white; /* Цвет текста кнопки */
+  border: none; /* Убираем границу */
+  padding: 10px 20px; /* Отступы внутри кнопки */
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px; /* Добавим отступ сверху */
+  margin-left: 150px;
+}
+
+/* Стили для блока с историей пополнений */
+.history-container {
+  margin-top: 20px; /* Отступ сверху для блока истории */
+}
+
+.history-container h3 {
+  color: #4CAF50; /* Цвет заголовка */
+}
+
+/* Стили для отдельных элементов истории, если нужно */
+.history-container div {
+  margin-bottom: 10px; /* Отступ между элементами истории */
+  border: 1px solid #ddd; /* Граница между элементами */
+  padding: 10px; /* Отступ внутри элемента */
+}
+.history-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.withdraw-info {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Стили для заголовка истории */
+.history-container h3 {
+  color: #4CAF50;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.success {
+  color: green;
+}
+
+/* Стили для неуспешного платежа (красный) */
+.failure {
+  color: red;
+}
+

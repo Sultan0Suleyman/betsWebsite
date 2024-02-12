@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS sport
+(
+    name_en VARCHAR(255) PRIMARY KEY
+);

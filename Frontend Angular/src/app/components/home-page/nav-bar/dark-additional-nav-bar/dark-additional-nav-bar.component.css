@@ -1,0 +1,33 @@
+.navbar1 li,.navbar2 li{
+  display: inline;
+  margin-right: 20px; /* Отступ между пунктами меню */
+}
+.navbar1 a,.navbar2 a{
+  text-decoration: none;
+}
+.navbar1 a{
+  color: darkgray;
+  font-size: small;
+}
+.navbar1 a:hover{
+  color: white;
+}
+#mainPage{
+  color: white;
+}
+.navbar1 ul,.navbar2 ul{
+  list-style-type: none; /* Убираем маркеры списка */
+  padding: 0;
+}
+.navbar1{
+  display: flex;
+  justify-content: space-between; /* Равномерно распределить элементы по ширине */
+  align-items: center; /* Выровнять элементы по вертикали */
+  background-color: #333;
+}
+.posSetLeft1{
+  margin-left: 30px;
+}
+.posSetRight1{
+  margin-right: 30px;
+}

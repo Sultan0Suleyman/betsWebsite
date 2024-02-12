@@ -1,0 +1,1 @@
+ALTER TABLE ordinary_bet MODIFY COLUMN winning_bet BOOLEAN NULL;

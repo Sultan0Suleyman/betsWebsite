@@ -1,0 +1,8 @@
+ALTER TABLE linemaker
+DROP COLUMN role;
+
+ALTER TABLE player
+DROP COLUMN role;
+
+ALTER TABLE support
+DROP COLUMN role;

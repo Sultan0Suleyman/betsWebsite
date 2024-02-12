@@ -1,0 +1,44 @@
+<app-dark-additional-nav-bar></app-dark-additional-nav-bar>
+<app-green-empty-nav-bar></app-green-empty-nav-bar>
+<div class="withdraw-container">
+  <h2>Withdraw money from your account</h2>
+
+  <div class="amount-input-container">
+    <label for="amount">Enter Amount (€):</label>
+    <input type="number" id="amount" name="amount" placeholder="Enter the amount" min="0" [(ngModel)]="amount">
+  </div>
+  <div class="payment-method-container">
+    <label for="paymentMethod">Choose payment method:</label>
+    <select id="paymentMethod" name="paymentMethod" [(ngModel)]="selectedPaymentMethod">
+      <option value="" disabled selected>Choose payment method</option>
+      <option *ngFor="let method of paymentMethods" [value]="method">{{ method }}</option>
+    </select>
+  </div>
+  <div class="amount-input-container">
+    <label for="accountNumber">Enter the account number:</label>
+    <input type="number" id="accountNumber" name="accountNumber" placeholder="Enter the account number"
+           min="0" [(ngModel)]="accountNumber">
+  </div>
+  <p class="success">{{ message }}</p>
+  <p class="failure">{{ errorMessage }}</p>
+  <button class="withdraw-button" (click)="withdraw()">Withdraw</button>
+  <button class="history-button" (click)="toggleHistory()">History of Withdraws</button>
+
+  <div *ngIf="showHistory" class="history-container">
+    <h3>History of Withdraws</h3>
+    <div *ngFor="let withdraw of withdrawHistory" class="history-item">
+      <div class="withdraw-info">
+        <p><strong>ID:</strong> {{ withdraw.id }}</p>
+        <p><strong>Withdrawal Amount (€):</strong> {{ withdraw.withdrawalAmount }}</p>
+        <p><strong>Payment method:</strong> {{ withdraw.paymentMethod.name_en}}</p>
+        <p><strong>Account number:</strong> {{ withdraw.accountNumber}}</p>
+        <p><strong>Date of Refill:</strong> {{ withdraw.dateOfWithdraw | date: 'yyyy-MM-dd HH:mm:ss' }}</p>
+        <p><strong>Payment status:</strong>
+          <span [ngClass]="{'success': withdraw.paymentSuccessful === true, 'failure': withdraw.paymentSuccessful === false, 'processing': withdraw.paymentSuccessful === null}">
+          {{ withdraw.paymentSuccessful === true ? 'Successful' : (withdraw.paymentSuccessful === false ? 'Failure' : 'In processing') }}
+        </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

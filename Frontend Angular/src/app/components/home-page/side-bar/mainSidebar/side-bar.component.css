@@ -1,0 +1,83 @@
+.sidebar {
+  width: 300px;
+  height: 84%;
+  position: fixed;
+  top: 116px;
+  left: 0;
+  overflow-y: auto;
+  z-index: 100;
+  background-color: #2c3e50; /* Цвет фона sidebar */
+  color: white;
+}
+.sidebar::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background-color: #34495e; /* Color of the track (the area behind the thumb) */
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #2980b9; /* Color of the thumb (the draggable part) */
+  border-radius: 6px; /* Rounded corners of the thumb */
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: #3498db; /* Color of the thumb on hover */
+}
+.scrolling-menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; /* Убираем внешний отступ у списка */
+}
+
+.sport-item {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #34495e; /* Цвет границы между элементами */
+  transition: background-color 0.3s; /* Плавный переход цвета при наведении */
+}
+
+.sport-item:hover {
+  background-color: #2980b9; /* Цвет фона при наведении */
+}
+
+.country-item {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #34495e;
+  margin-left: 15px;
+  transition: background-color 0.3s;
+}
+
+.country-item:hover {
+  background-color: #2980b9;
+}
+#mainLogSport{
+  color: aqua;
+}
+.league-item {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #34495e;
+  margin-left: 30px; /* Adjust the margin as needed */
+  transition: background-color 0.3s;
+}
+
+.league-item:hover {
+  background-color: #2980b9;
+}
+.message{
+  color: white;
+  font-family: bold, sans-serif;
+  margin-left: 8px;
+}

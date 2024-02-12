@@ -1,0 +1,13 @@
+<div id="topEvents">Live:</div>
+<div class="horizontal-scroll">
+  <div class="item" *ngFor="let event of arrayOfTopEvents">
+    <p class="nameOfEvent">{{ event.nameOfEvent }}</p>
+    <p class="dateEvent">{{ event.date | date:'dd.MM.yyyy' }}</p>
+    <br>
+    <p class="coefficient">Win1: {{ event.win1 }}</p>
+    <p class="coefficient">Draw: {{ event.draw }}</p>
+    <p class="coefficient">Win2: {{ event.win2 }}</p>
+  </div>
+
+  <!-- Добавьте больше элементов, если необходимо -->
+</div>

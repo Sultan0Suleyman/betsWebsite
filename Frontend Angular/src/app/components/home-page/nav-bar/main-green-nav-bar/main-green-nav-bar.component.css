@@ -1,0 +1,146 @@
+
+.navbar2 {
+  background-color: forestgreen;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.posSetLeft2 a {
+  color: white;
+  font-size: x-large;
+  margin-left: 30px;
+  font-weight: bold;
+  font-family: "Arial Black", serif;
+}
+
+.posSetLeft2 a span {
+  color: yellow;
+}
+
+.navbar2 a {
+  color: white;
+}
+
+.posSetCenter2 a:hover,
+.posSetRight2 a:hover {
+  color: aquamarine;
+}
+
+.posSetRight2 {
+  margin-right: 30px;
+}
+
+.posSetRight2 ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.posSetRight2 li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.posSetRight2 .dropdown-button {
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  position: relative;
+}
+
+.posSetRight2 .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: forestgreen;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.posSetRight2 .dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  display: block;
+  text-decoration: none;
+}
+
+.posSetRight2 .dropdown-content a:hover {
+  background-color: lightgrey;
+}
+
+.posSetRight2 .dropdown-button:hover .dropdown-content {
+  display: block;
+}
+
+/* Оформление playerId как кнопки */
+.posSetRight2 .player-id-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+
+.posSetRight2 .player-id-button:hover {
+  color: aquamarine;
+}
+
+#loginBtn {
+  background-color: yellow;
+  color: black;
+  padding: 5px 8px;
+}
+
+#loginBtn:hover {
+  background-color: lightgrey;
+}
+
+.navbar2 li {
+  display: inline;
+  margin-right: 20px;
+}
+
+.navbar2 a {
+  text-decoration: none;
+}
+
+.navbar2 ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.posSetRight2 .refresh-button {
+  margin-left: 5px;
+  font-size: small;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: white;
+}
+
+.posSetRight2 .rotate-animation {
+  transition: transform 0.3s ease;
+  transform: rotate(360deg);
+}
+.posSetRight2 .balance-label {
+  color: white;
+  margin-right: 5px;
+}
+
+.posSetRight2 .balance-amount {
+  color: aquamarine;
+  font-weight: bold;
+}
+
+.posSetRight2 .action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.posSetRight2 .action-button:hover {
+  color: aquamarine;
+}

@@ -1,0 +1,7 @@
+<div *ngIf="photos.length > 0" class="bewerbung" (mouseenter)="onPanelMouseEnter()">
+  <a href="#">
+    <img [src]="photos[currentPhotoIndex]" alt="Current Photo">
+  </a>
+</div>
+<button class="newsChanger" (click)="onClickButton()"> > </button>
+

@@ -1,0 +1,21 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { TopeventsComponent } from './topevents.component';
+
+describe('TopeventsComponent', () => {
+  let component: TopeventsComponent;
+  let fixture: ComponentFixture<TopeventsComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [TopeventsComponent]
+    });
+    fixture = TestBed.createComponent(TopeventsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

@@ -1,0 +1,45 @@
+<header>
+  <app-dark-additional-nav-bar></app-dark-additional-nav-bar>
+  <app-main-green-nav-bar (betHistoryClicked)="onBetHistoryClicked()"></app-main-green-nav-bar>
+</header>
+
+<app-side-bar (countrySportSelected)="onCountrySportSelected($event)"></app-side-bar>
+
+<ng-container *ngIf="(!selectedCountry || !selectedSport)&&!isBetHistoryClicked">
+  <!-- Контент по умолчанию -->
+  <app-default-content></app-default-content>
+</ng-container>
+
+<ng-container *ngIf="selectedCountry && selectedSport && !selectedGameId&&!isBetHistoryClicked">
+  <!-- Контент для выбранных страны и спорта -->
+  <app-leagues-matches-content
+    [selectedCountry]="selectedCountry"
+    [selectedSport]="selectedSport"
+    [selectedLeague]="selectedLeague"
+    (idOfMatchSelected)="onIdOfMatchSelected($event)"
+  ></app-leagues-matches-content>
+</ng-container>
+
+<ng-container *ngIf="selectedGameId&&!isBetHistoryClicked">
+  <app-full-game-content
+    [selectedGameId]="selectedGameId"
+  ></app-full-game-content>
+</ng-container>
+
+<ng-container *ngIf="isBetHistoryClicked&&isAuthenticated">
+  <app-bet-history-content
+    [userId]="userId"
+  ></app-bet-history-content>
+</ng-container>
+
+<div class="overlay-buttons">
+  <button mat-icon-button (click)="openCouponDialog()">
+    <mat-icon>add_shopping_cart</mat-icon>
+    <span>Coupon</span>
+    <span class="coupon-count">{{ couponCount }}</span>
+  </button>
+  <button mat-icon-button (click)="openChatDialog()">
+    <mat-icon>chat</mat-icon>
+    <span>Support</span>
+  </button>
+</div>

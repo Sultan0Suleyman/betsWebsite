@@ -1,0 +1,89 @@
+.coupon-container {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.coupon-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bet {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bet-info {
+  flex-grow: 1;
+}
+
+.remove-button {
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: #c0392b;
+}
+
+.betting-section {
+  margin-top: 20px;
+}
+
+label {
+  margin-right: 10px;
+}
+
+input {
+  width: 100px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+p {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.empty-coupon-message {
+  color: #666;
+}
+
+.bet-count {
+  background-color: #3498db;
+  color: white;
+  padding: 3px 6px;
+  border-radius: 50%;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.error{
+  color: #ec1d06;
+}
+
+.success{
+  color: #3498db;
+}

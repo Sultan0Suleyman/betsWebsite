@@ -1,0 +1,54 @@
+.content {
+  margin-left: 300px;
+  margin-top: 116px;
+  padding: 20px;
+}
+
+h2 {
+  color: #a8ee56;
+  margin-bottom: 20px; /* Добавил отступ между заголовками и списками */
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  font-weight: 600;
+  position: relative; /* Добавил позицию для позиционирования вложенных элементов */
+}
+
+/* Стили для кнопок */
+button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+.cursorPointerLi:hover {
+  cursor: pointer;
+}
+
+/* Стили для "Live" и "Sold" текста */
+
+.cursorDefaultLi:hover{
+  cursor: default;
+}
+
+span {
+  font-weight: bolder;
+}
+
+.bgOrdinary{
+  background-color: #aff4f6;
+}
+.moneyOutcome{
+  color: #4CAF50;
+}
