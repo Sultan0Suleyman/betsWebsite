@@ -1,0 +1,66 @@
+<div class="container">
+<form [formGroup]="myForm" (ngSubmit)="submitForm()">
+  <h2>Register Worker</h2>
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" formControlName="name">
+  <br>
+  <label for="surname">Surname:</label><br>
+  <input type="text" id="surname" formControlName="surname">
+  <br>
+  <label for="numberOfPassport">Passport Number:</label><br>
+  <input type="number" id="numberOfPassport"
+         formControlName="numberOfPassport"
+         (input)="limitPassportNumber($event)">
+  <br>
+  <label for="passportIssueDate">Passport Issue Date:</label><br>
+  <input type="date" id="passportIssueDate" formControlName="passportIssueDate">
+  <p *ngIf="myForm.get('passportIssueDate')?.hasError('futureDate')">
+    Passport issue date cannot be in the future.
+  </p>
+  <br>
+  <label for="passportIssuingAuthority">Passport Issuing Authority:</label><br>
+  <input type="text" id="passportIssuingAuthority" formControlName="passportIssuingAuthority">
+  <br>
+  <label for="email">Email:</label><br>
+  <input type="email" id="email" formControlName="email" >
+  <br>
+  <p *ngIf="!myForm.get('email')?.valid&&myForm.get('email')?.dirty&&myForm.get('email')?.touched">Wrong type of email</p>
+  <label for="password1">Enter the password(min 8 symbols):</label><br>
+  <input type="password" id="password1" formControlName="password1" >
+  <br>
+  <p id="mainValidator" *ngIf="myForm.get('password1')?.invalid
+    &&myForm.get('password1')?.touched">
+    Add at least one A-Z and 1-9</p>
+  <label for="password2">Repeat the password</label><br>
+  <input type="password" id="password2" formControlName="password2" >
+  <br>
+  <p *ngIf="(myForm.get('password1')?.value!==myForm.get('password2')?.value)
+    &&myForm.get('password2')?.dirty&&myForm.get('password2')?.touched">Password mismatch</p>
+  <label for="role">Role:</label><br>
+  <select id="role" formControlName="role">
+    <option value="" disabled selected>Select role</option>
+    <option value="Linemaker">Linemaker</option>
+    <option value="Support">Support</option>
+  </select>
+  <br>
+  <button type="button" *ngIf="!contract" (click)="openContractModal()">Add Contract</button>
+
+  <div *ngIf="contract" class="contract-info">
+    <h3>Contract Details</h3>
+    <p><strong>Creation Date:</strong> {{ contract.contractCreationDate }}</p>
+    <p><strong>Date Of Expiry:</strong> {{ contract.contractDateOfExpiry }}</p>
+    <p><strong>Salary:</strong> {{ contract.contractSalary }}$</p>
+    <button type="button" (click)="removeContract()">Remove Contract</button>
+  </div>
+
+  <app-contract-modal
+    [isOpen]="isContractModalOpen"
+    (contractCreated)="onContractCreated($event)"
+    (modalClosed)="closeContractModal()">
+  </app-contract-modal>
+  <br>
+  <p *ngIf="submissionMessage">{{ submissionMessage }}</p>
+  <br>
+  <button type="submit" [disabled]="!myForm.valid || !contract">Submit</button>
+</form>
+</div>

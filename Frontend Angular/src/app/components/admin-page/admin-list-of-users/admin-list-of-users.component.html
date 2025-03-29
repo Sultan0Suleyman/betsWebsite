@@ -1,0 +1,29 @@
+<p>Sort by role:</p>
+<button (click)="onRoleButton('ROLE_PLAYER')">Player</button>
+<button (click)="onRoleButton('ROLE_SUPPORT')">Support</button>
+<button (click)="onRoleButton('ROLE_LINEMAKER')">Linemaker</button>
+<button (click)="onShowAllButton()">Show All</button>
+
+<table>
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Surname</th>
+    <th>Role</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users">
+    <td>{{ user.id }}</td>
+    <td>{{ user.name }}</td>
+    <td>{{ user.surname }}</td>
+    <td>{{ user.role }}</td>
+    <td>
+      <button (click)="viewUserDetails(user.id)">View</button>
+      <button (click)="deleteUser(user.id)">Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>

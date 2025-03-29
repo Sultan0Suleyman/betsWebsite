@@ -1,0 +1,111 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;   /* Выравнивание по верхней границе */
+  min-height: 100vh;         /* Минимальная высота – 100% высоты экрана */
+  padding-top: 60px;        /* Отступ сверху, оставляющий место для баннера */
+  width: 100%;
+}
+
+form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ddd;
+  text-align: left;
+}
+
+label {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #555;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+p {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 15px;
+  transition: background 0.3s;
+}
+
+button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background: #45a049;
+}
+
+
+.contract-info {
+  margin-top: 20px;
+  padding: 15px;
+  border: 2px solid #4CAF50;
+  background-color: #e8f5e9;
+  border-radius: 5px;
+}
+
+.contract-info h3 {
+  margin-top: 0;
+  color: #2e7d32;
+}
+
+.contract-info button {
+  margin-top: 10px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.contract-info button:hover {
+  background: #b71c1c;
+}

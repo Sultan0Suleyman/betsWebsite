@@ -1,0 +1,28 @@
+<div class="modal-overlay" *ngIf="isOpen">
+  <div class="modal-content">
+    <h3>Create Contract</h3>
+    <form [formGroup]="contractForm" (ngSubmit)="saveContract()">
+
+      <label for="contractCreationDate">Contract Creation Date:</label>
+      <input type="date" id="contractCreationDate" formControlName="contractCreationDate">
+      <p *ngIf="contractForm.get('contractCreationDate')?.hasError('futureDate')">
+        Contract creation date cannot be in the future.
+      </p>
+
+      <label for="contractDateOfExpiry">Contract Date Of Expiry:</label>
+      <input type="date" id="contractDateOfExpiry" formControlName="contractDateOfExpiry">
+      <p *ngIf="contractForm.hasError('invalidExpiryDate')">
+        Contract expiry date must be later than the creation date.
+      </p>
+
+      <label for="contractSalary">Contract Salary:</label>
+      <input type="number" id="contractSalary" formControlName="contractSalary" step="0.01">
+      <p *ngIf="contractForm.get('contractSalary')?.hasError('min')">
+        Salary cannot be negative.
+      </p>
+
+      <button type="submit" [disabled]="contractForm.invalid">Save Contract</button>
+      <button type="button" (click)="closeModal()">Close</button>
+    </form>
+  </div>
+</div>

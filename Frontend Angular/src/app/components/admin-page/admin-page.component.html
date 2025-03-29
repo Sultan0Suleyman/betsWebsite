@@ -1,0 +1,14 @@
+<header>
+  <app-admin-nav-bar (listOfUsersClicked)="onIsListOfUsersClicked()"
+                     (registerWorkerClicked)="onIsRegisterWorkerClicked()">
+  </app-admin-nav-bar>
+</header>
+
+<ng-container *ngIf="isListOfUsersClicked">
+  <app-admin-list-of-users></app-admin-list-of-users>
+</ng-container>
+
+<ng-container *ngIf="isRegisterWorkerClicked">
+  <app-admin-worker-registration></app-admin-worker-registration>
+</ng-container>
+
