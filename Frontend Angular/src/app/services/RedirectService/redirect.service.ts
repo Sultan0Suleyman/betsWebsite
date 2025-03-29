@@ -19,7 +19,7 @@ export class RedirectService {
       case 'ROLE_SUPPORT':
         this.router.navigate(['/support']);
         break;
-      case 'ROLE_ADMIN':
+      case 'ROLE_MAIN_ADMIN':
         this.router.navigate(['/admin']);
         break;
     }

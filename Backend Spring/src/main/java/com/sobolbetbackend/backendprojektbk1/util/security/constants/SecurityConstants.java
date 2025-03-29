@@ -13,9 +13,6 @@ public class SecurityConstants {
     public static final long JWT_ACCESS_TOKEN_EXPIRATION = 20*60*1000;
     public static final long JWT_REFRESH_TOKEN_EXPIRATION = 24*60*60*1000;
 
-    static {
-        generateNewSecretKey();
-    }
 
     public static void generateNewSecretKey() {
         lock.lock();

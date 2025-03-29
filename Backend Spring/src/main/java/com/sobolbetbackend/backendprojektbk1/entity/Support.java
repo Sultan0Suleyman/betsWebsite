@@ -1,30 +1,16 @@
 package com.sobolbetbackend.backendprojektbk1.entity;
 
-import com.sobolbetbackend.backendprojektbk1.entity.common.UserE;
-import com.sobolbetbackend.backendprojektbk1.entity.other.Contract;
+import com.sobolbetbackend.backendprojektbk1.entity.common.Worker;
 import jakarta.persistence.*;
 
 @Entity
-public class Support{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @OneToOne(mappedBy = "support")
-    private Contract contract;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserE user;
+@DiscriminatorValue("SUPPORT")
+public class Support extends Worker {
+    // Дополнительные атрибуты и методы могут быть добавлены здесь
 
     public Support() {
-        user = new UserE();
+        super();
     }
 
-    public Contract getContract() {
-        return contract;
-    }
-
-    public void setContract(Contract contract) {
-        this.contract = contract;
-    }
 
 }

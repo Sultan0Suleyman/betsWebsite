@@ -24,7 +24,7 @@ export class SideBarComponent implements OnInit{
     // Fetch data from the backend
     this.http.get<string[]>('http://localhost:8080/list/sports').subscribe({
       next:(data: string[]) => {
-        this.listOfSports = data;
+        this.listOfSports = data
       },
       error:(error) => {
         console.error('Error fetching sports:', error);
@@ -60,15 +60,15 @@ export class SideBarComponent implements OnInit{
       this.http.get<string[]>(`http://localhost:8080/list/leagues/${sport}/${country}`).subscribe({
         next:(data: string[]) => {
           if(data===null){
-            this.onLeagueClick(country,'null',sport);
-            this.shouldShowArrow = false;
+            this.onLeagueClick(country,'null',sport)
+            this.shouldShowArrow = false
           }else{
-            this.shouldShowArrow = true;
-            this.listOfLeagues[`${country}-${sport}`] = data;
+            this.shouldShowArrow = true
+            this.listOfLeagues[`${country}-${sport}`] = data
           }
         },
         error:(error) => {
-          console.error('Error fetching leagues:', error);
+          console.error('Error fetching leagues:', error)
         }
     });
     }

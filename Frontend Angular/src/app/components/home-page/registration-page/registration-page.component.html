@@ -2,43 +2,62 @@
   <app-dark-additional-nav-bar></app-dark-additional-nav-bar>
   <app-green-empty-nav-bar></app-green-empty-nav-bar>
 </header>
+
 <div class="registrationMain">
-<h2>Registration</h2>
-  <form [formGroup]="myForm" (ngSubmit)="submitForm()">
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" formControlName="name">
-    <br>
-    <label for="surname">Surname:</label><br>
-    <input type="text" id="surname" formControlName="surname">
-    <br>
-    <label for="numberOfPassport">Passport Number:</label><br>
-    <input type="number" id="numberOfPassport" formControlName="numberOfPassport">
-    <br>
-    <label for="passportIssueDate">Passport Issue Date:</label><br>
-    <input type="date" id="passportIssueDate" formControlName="passportIssueDate">
-    <br>
-    <label for="passportIssuingAuthority">Passport Issuing Authority:</label><br>
-    <input type="text" id="passportIssuingAuthority" formControlName="passportIssuingAuthority">
-    <br>
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" formControlName="email" >
-    <br>
-    <p *ngIf="!myForm.get('email')?.valid&&myForm.get('email')?.dirty&&myForm.get('email')?.touched">Wrong type of email</p>
-    <label for="password1">Enter the password(min 8 symbols):</label><br>
-    <input type="password" id="password1" formControlName="password1" >
-    <br>
-    <p id="mainValidator" *ngIf="myForm.get('password1')?.invalid
-    &&myForm.get('password1')?.touched">
-      Add at least one A-Z and 1-9</p>
-    <label for="password2">Repeat the password</label><br>
-    <input type="password" id="password2" formControlName="password2" >
-    <br>
-    <p *ngIf="(myForm.get('password1')?.value!==myForm.get('password2')?.value)
-    &&myForm.get('password2')?.dirty&&myForm.get('password2')?.touched">Password mismatch</p>
-    <button type="submit" [disabled]="!myForm.valid">Submit</button>
-  </form>
-  <div id="date">
-    <p *ngIf="submissionMessage">{{ submissionMessage }}</p>
+  <div class="form-container">
+    <h2>Registration</h2>
+    <form [formGroup]="myForm" (ngSubmit)="submitForm()">
+      <div class="form-group">
+        <label for="name">First Name:</label>
+        <input type="text" id="name" formControlName="name">
+      </div>
+      <div class="form-group">
+        <label for="surname">Last Name:</label>
+        <input type="text" id="surname" formControlName="surname">
+      </div>
+      <div class="form-group">
+        <label for="numberOfPassport">Passport Number:</label>
+        <input type="number" id="numberOfPassport"
+               formControlName="numberOfPassport"
+               (input)="limitPassportNumber($event)">
+      </div>
+      <div class="form-group">
+        <label for="passportIssueDate">Passport Issue Date:</label>
+        <input type="date" id="passportIssueDate" formControlName="passportIssueDate">
+        <p class="error" *ngIf="myForm.get('passportIssueDate')?.hasError('futureDate')">
+          Passport issue date cannot be in the future.
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="passportIssuingAuthority">Issuing Authority:</label>
+        <input type="text" id="passportIssuingAuthority" formControlName="passportIssuingAuthority">
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" formControlName="email">
+        <p class="error" *ngIf="!myForm.get('email')?.valid && myForm.get('email')?.dirty && myForm.get('email')?.touched">
+          Invalid email format.
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="password1">Password (minimum 8 characters, at least 1 uppercase letter and 1 digit):</label>
+        <input type="password" id="password1" formControlName="password1">
+        <p class="error" *ngIf="myForm.get('password1')?.invalid && myForm.get('password1')?.touched">
+          Password must be at least 8 characters long and include at least one uppercase letter and one digit.
+        </p>
+      </div>
+      <div class="form-group">
+        <label for="password2">Repeat Password:</label>
+        <input type="password" id="password2" formControlName="password2">
+        <p class="error" *ngIf="(myForm.get('password1')?.value !== myForm.get('password2')?.value)
+                               && myForm.get('password2')?.dirty && myForm.get('password2')?.touched">
+          Passwords do not match.
+        </p>
+      </div>
+      <button type="submit" [disabled]="!myForm.valid">Register</button>
+    </form>
+    <div class="message">
+      <p *ngIf="submissionMessage">{{ submissionMessage }}</p>
+    </div>
   </div>
 </div>
-

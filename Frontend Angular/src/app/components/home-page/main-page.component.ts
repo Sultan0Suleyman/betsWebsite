@@ -51,7 +51,7 @@ export class MainPageComponent implements DoCheck{
     this.isAuthenticated = this.authService.isAuthenticated()
   }
 
-  onBetHistoryClicked() {
+  onIsBetHistoryClicked() {
     this.isBetHistoryClicked = true
   }
 }

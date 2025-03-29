@@ -15,7 +15,7 @@ export class AdminGuard {
   }
   canActivate(): Observable<boolean> {
     return this.authService.getCurrentObservableUser().pipe(
-      map(user => !!user && user.role === 'ROLE_ADMIN'),
+      map(user => !!user && user.role === 'ROLE_MAIN_ADMIN'),
       first() // или switchMap, в зависимости от ваших потребностей
     );
   }

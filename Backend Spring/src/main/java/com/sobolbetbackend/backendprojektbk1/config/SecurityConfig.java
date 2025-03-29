@@ -44,7 +44,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors->cors.configurationSource(corsConfigurationSource())) // Включаем нашу конфигурацию CORS
+                .cors(cors->cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception->exception.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(sess->sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/jwt-refresh-token-logic/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/csrf/token").permitAll()
+                        .requestMatchers("/admin/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/list/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/player/data/**").permitAll()
                         .requestMatchers("/payment/**").permitAll()
@@ -69,7 +70,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS","PUT","PATCH"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS","PUT","PATCH","DELETE"));
         configuration.addAllowedHeader("*"); // Разрешить все заголовки
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -81,6 +82,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/player/data/**", configuration);
         source.registerCorsConfiguration("/payment/**", configuration);
         source.registerCorsConfiguration("/bet/**", configuration);
+        source.registerCorsConfiguration("/admin/**",configuration);
         return source;
     }
     @Bean

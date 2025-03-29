@@ -36,9 +36,15 @@ import {PlayerGuard} from "./guards/PlayerGuard/player.guard";
 import { TopUpPageComponent } from './components/home-page/top-up-page/top-up-page.component';
 import { BetHistoryContentComponent } from './components/home-page/bet-history-content/bet-history-content.component';
 import {MatTableModule} from "@angular/material/table";
+import { AdminPageComponent } from './components/admin-page/admin-page.component';
+import { AdminNavBarComponent } from './components/admin-page/admin-nav-bar/admin-nav-bar.component';
+import { AdminListOfUsersComponent } from './components/admin-page/admin-list-of-users/admin-list-of-users.component';
+import { AdminWorkerRegistrationComponent } from './components/admin-page/admin-worker-registration/admin-worker-registration.component';
+import { ContractModalComponent } from './components/admin-page/admin-worker-registration/contract-modal/contract-modal.component';
 
 const routes: Routes=[
   { path: '', redirectTo: '/player/main-page', pathMatch: 'full' },
+  { path: 'home/login', component: LoginPageComponent },
   {
     path: 'player',
     children: [
@@ -48,7 +54,8 @@ const routes: Routes=[
       { path:'withdraw',component: WithdrawPageComponent ,canActivate: [PlayerGuard] },
       { path:'top-up',component: TopUpPageComponent ,canActivate: [PlayerGuard] },
     ]
-  }
+  },
+  { path: 'admin', component: AdminPageComponent, canActivate: [AdminGuard] }
   ]
 
 @NgModule({
@@ -71,6 +78,11 @@ const routes: Routes=[
     WithdrawPageComponent,
     TopUpPageComponent,
     BetHistoryContentComponent,
+    AdminPageComponent,
+    AdminNavBarComponent,
+    AdminListOfUsersComponent,
+    AdminWorkerRegistrationComponent,
+    ContractModalComponent,
   ],
   imports: [
     HttpClientModule,

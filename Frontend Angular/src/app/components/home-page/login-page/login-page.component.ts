@@ -28,29 +28,34 @@ export class LoginPageComponent{
     if (this.myForm.valid) {
       const formData = this.myForm.value;
       this.submitChecker = true;
-      this.authService.login(formData).subscribe(
-        (response:any) => {
+      this.authService.login(formData).subscribe({
+        next: (response:any) => {
           console.log(response); // Log the entire response to inspect its structure
           // Обработка успешного ответа
           if (response && response.accessToken) {
-            this.errorMessage = 'Login successful';
-
+            this.errorMessage = 'Login successful'
             // Сохранение токена в localStorage (вам следует рассмотреть более безопасные варианты)
             // Авторизация успешна, обновляем текущего пользователя
             // Редирект на нужную страницу в зависимости от роли
             this.authService.getCurrentObservableUser().subscribe((user) => {
-              this.redirectService.handleRoleBasedRedirect(user.role);
-              const currentTime = new Date();
-              if (!this.myForm.get('rememberMe')?.value) {
-                const futureTimeLogout = new Date();
-                const storedDate = localStorage.getItem('dateOfLogout');
+              this.redirectService.handleRoleBasedRedirect(user.role)
+              const currentTime = new Date()
+              const futureTimeLogout = new Date();
+              const storedDate = localStorage.getItem('dateOfLogout');
+              if (!this.myForm.get('rememberMe')?.value&&this.authService.getUserRole()!=="ROLE_MAIN_ADMIN") {
                 if(!storedDate){
                   futureTimeLogout.setHours(currentTime.getHours() + 1);
-                  console.log("Date of logout: "+futureTimeLogout)
-                  localStorage.setItem('dateOfLogout', futureTimeLogout.toString());
-                  localStorage.setItem('lastActivity',new Date().toString())
+                  console.log("Date of logout: " + futureTimeLogout)
+                  localStorage.setItem('dateOfLogout', futureTimeLogout.toString())
+                }
+              }else if(this.authService.getUserRole()==="ROLE_MAIN_ADMIN") {
+                if (!storedDate) {
+                  futureTimeLogout.setMinutes(currentTime.getMinutes()+30)
+                  console.log("Date of logout: " + futureTimeLogout)
+                  localStorage.setItem('dateOfLogout', futureTimeLogout.toString())
                 }
               }
+              localStorage.setItem('lastActivity',new Date().toString())
               const dateOfRefresh = new Date()
               dateOfRefresh.setTime(currentTime.getTime()+14*60*1000)
               localStorage.setItem('dateOfRefresh', dateOfRefresh.toString())
@@ -60,15 +65,29 @@ export class LoginPageComponent{
             console.error('Wrong format of response:', response);
           }
         },
-        (error) => {
+        error: (error) => {
           // Обработка ошибки
-          console.error('Login failed:', error);
+          console.error('Login failed:', error)
           // Отобразите сообщение об ошибке пользователю, например, через переменную в шаблоне
-          this.errorMessage = 'Wrong login or password';
-        }
+          this.errorMessage = 'Wrong login or password'
+        }}
       );
     }
   }
+
+  // onLoginPlayerLogic(){
+  //   const currentTime = new Date()
+  //   if (!this.myForm.get('rememberMe')?.value&&this.authService.getUserRole()=="ROLE_PLAYER") {
+  //     const futureTimeLogout = new Date();
+  //     const storedDate = localStorage.getItem('dateOfLogout');
+  //     if(!storedDate){
+  //       futureTimeLogout.setHours(currentTime.getHours() + 1);
+  //       console.log("Date of logout: "+futureTimeLogout)
+  //       localStorage.setItem('dateOfLogout', futureTimeLogout.toString())
+  //       localStorage.setItem('lastActivity',new Date().toString())
+  //     }
+  //   }
+  // }
 
   ngOnInit(): void {
     this.myForm = this.formBuilder.group({

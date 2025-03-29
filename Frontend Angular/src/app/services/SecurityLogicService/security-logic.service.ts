@@ -13,14 +13,14 @@ export class SecurityLogicService implements OnInit{
   ) {
 
   }
-  refreshAccessToken(){
-    const currentDate = new Date()
+  refreshAccessToken() {
+    const currentTime = Date.now();
     const storedDate = localStorage.getItem('dateOfRefresh');
-    console.log(storedDate)
-    if(storedDate){
-      const dateOfRefresh = new Date(storedDate);
-      if(currentDate>=dateOfRefresh){
-        this.authService.refreshTokenIfNeeded()
+
+    if (storedDate) {
+      const dateOfRefresh = parseInt(storedDate, 10); // Преобразование в число для сравнения
+      if (currentTime >= dateOfRefresh) {
+        this.authService.refreshTokenIfNeeded();
       }
     }
   }
@@ -35,7 +35,7 @@ export class SecurityLogicService implements OnInit{
       if (currentTime - lastActivity > this.inactivityThreshold) {
         console.log('User came from nonactive period');
         this.authService.refreshRefreshToken()
-        localStorage.setItem(this.lastActivityKey,new Date().toString())
+        this.updateLastActivity()
       }
     }
   }

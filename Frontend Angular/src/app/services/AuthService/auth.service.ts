@@ -29,20 +29,33 @@ export class AuthService {
     this.loadUserFromLocalStorage();
     console.log('User loaded');
 
-    this.router.events.subscribe(event => {
-      if (event instanceof ActivationStart) {
-        if (this.isAuthenticated()) {
-          const currentDate = new Date();
-          const storedDate = localStorage.getItem('dateOfLogout');
-          if (storedDate) {
-            const dateOfLogout = new Date(storedDate);
-            if (currentDate >= dateOfLogout) {
-              this.logout();
-            }
+    // this.router.events.subscribe(event => {
+    //   if (event instanceof ActivationStart) {
+    //     if (this.isAuthenticated()) {
+    //       const currentDate = new Date();
+    //       const storedDate = localStorage.getItem('dateOfLogout');
+    //       if (storedDate) {
+    //         const dateOfLogout = new Date(storedDate);
+    //         if (currentDate >= dateOfLogout) {
+    //           this.logout();
+    //         }
+    //       }
+    //     }
+    //   }
+    // });
+    setInterval(() => {
+      if (this.isAuthenticated()) {
+        const currentDate = new Date();
+        const storedDate = localStorage.getItem('dateOfLogout');
+        if (storedDate) {
+          const dateOfLogout = new Date(storedDate);
+          if (currentDate >= dateOfLogout) {
+            this.logout();
           }
         }
       }
-    });
+     }, 16*60*1000); // проверка каждые 16 минут
+
   }
   public login(credentials: { username: string; password: string }): Observable<any> {
     return this.http.post(this.loginUrl, credentials).pipe(
@@ -162,5 +175,15 @@ export class AuthService {
 
   public getCurrentUser(){
     return this.currentUserSubject
+  }
+
+  public getUserRole(): string | null {
+    const currentUser = this.currentUserSubject.value;
+
+    if (currentUser && currentUser.role) {
+      return currentUser.role;  // Возвращает роль пользователя
+    }
+
+    return null;  // Если роль не найдена
   }
 }

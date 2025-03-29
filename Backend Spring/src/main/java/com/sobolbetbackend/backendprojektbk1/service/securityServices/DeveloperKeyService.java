@@ -15,7 +15,7 @@ public class DeveloperKeyService {
     @PostConstruct
     public void initializeKey() {
         this.developerKey = generateDeveloperKey();
-        writeKeyToFile(this.developerKey, "C:\\Users\\mrlen\\Desktop\\developer-key.txt");
+        writeKeyToFile(this.developerKey);
     }
     public String getDeveloperKey() {
         return this.developerKey;
@@ -29,10 +29,10 @@ public class DeveloperKeyService {
         return bytesToHex(keyBytes);
     }
 
-    private void writeKeyToFile(String key, String fileName) {
-        try (FileWriter writer = new FileWriter(fileName)) {
+    private void writeKeyToFile(String key) {
+        try (FileWriter writer = new FileWriter("C:\\Users\\mrlen\\Desktop\\developer-key.txt")) {
             writer.write(key);
-            System.out.println("Developer Key has been written to " + fileName);
+            System.out.println("Developer Key has been written to " + "C:\\Users\\mrlen\\Desktop\\developer-key.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
