@@ -1,0 +1,23 @@
+<div class="dialog-container">
+  <h2>User Information</h2>
+
+  <div class="info">
+    <p><strong>Name:</strong> {{ data.name }}</p>
+    <p><strong>Surname:</strong> {{ data.surname }}</p>
+    <p><strong>Email:</strong> {{ data.email }}</p>
+    <p><strong>Role:</strong> {{ data.role }}</p>
+
+    <h3>Passport Details</h3>
+    <p><strong>Passport Number:</strong> {{ data.numberOfPassport }}</p>
+    <p><strong>Issue Date:</strong> {{ data.passportIssueDate }}</p>
+    <p><strong>Issuing Authority:</strong> {{ data.passportIssuingAuthority }}</p>
+  </div>
+
+  <!-- Contract section appears ONLY if a contract exists -->
+  <div class="contract" *ngIf="data.contract">
+    <h3>Contract</h3>
+    <p><strong>Creation Date:</strong> {{ data.contract.contractCreationDate }}</p>
+    <p><strong>Expiration Date:</strong> {{ data.contract.contractDateOfExpiry }}</p>
+    <p><strong>Salary:</strong> {{ data.contract.contractSalary | currency:'USD' }}</p>
+  </div>
+</div>
