@@ -1,27 +1,29 @@
 package com.sobolbetbackend.backendprojektbk1.service.adminServices.usersServices;
 
-import com.sobolbetbackend.backendprojektbk1.dto.Admin.UserEDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Admin.listOfUsers.UserEDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Admin.listOfUsers.UserInfoDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Admin.workerRegistration.ContractDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Admin.workerRegistration.WorkerCredentialDTO;
 import com.sobolbetbackend.backendprojektbk1.entity.common.UserE;
+import com.sobolbetbackend.backendprojektbk1.entity.common.Worker;
 import com.sobolbetbackend.backendprojektbk1.entity.other.Role;
 import com.sobolbetbackend.backendprojektbk1.repository.authenticationRepos.UserRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.otherRepos.RoleRepo;
+import com.sobolbetbackend.backendprojektbk1.repository.workerRegistrationRepos.WorkerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class AdminUserEService {
     private final UserRepo userRepo;
-    private final RoleRepo roleRepo;
+    private final WorkerRepo workerRepo;
 
     @Autowired
-    public AdminUserEService(UserRepo userRepo, RoleRepo roleRepo) {
+    public AdminUserEService(UserRepo userRepo, WorkerRepo workerRepo) {
         this.userRepo = userRepo;
-        this.roleRepo = roleRepo;
+        this.workerRepo = workerRepo;
     }
 
     public List<UserEDTO> getAllUsers(){
@@ -62,6 +64,42 @@ public class AdminUserEService {
     public void deleteUser(Long id){
         userRepo.deleteById(id);
     }
+
+    public UserInfoDTO getUserInfo(Long userId) {
+        UserE user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        UserInfoDTO userInfo = new UserInfoDTO();
+        userInfo.setName(user.getName());
+        userInfo.setSurname(user.getSurname());
+        userInfo.setEmail(user.getEmail());
+        userInfo.setNumberOfPassport(user.getNumberOfPassport());
+        userInfo.setPassportIssueDate(user.getPassportIssueDate());
+        userInfo.setPassportIssuingAuthority(user.getPassportIssuingAuthority());
+
+        ContractDTO contractDTO = null;
+
+        if (user.getRoles().stream().anyMatch(role ->
+                role.getName().equals("ROLE_LINEMAKER") || role.getName().equals("ROLE_SUPPORT"))) {
+            Optional<Worker> optionalWorker = workerRepo.findByUserId(userId);
+            if(optionalWorker.isPresent()){
+                Worker worker = optionalWorker.get();
+                contractDTO = new ContractDTO();
+                contractDTO.setContractSalary(worker.getContract().getSalary());
+                contractDTO.setContractCreationDate(worker.getContract().getCreatedAt());
+                contractDTO.setContractDateOfExpiry(worker.getContract().getValid_until());
+
+                userInfo.setRole(worker.getWorkerType());
+            }
+        }else{
+            userInfo.setRole("PLAYER");
+        }
+
+        userInfo.setContract(contractDTO);
+
+        return userInfo;
+    }
+
 
 
 }

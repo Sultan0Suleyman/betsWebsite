@@ -1,18 +1,83 @@
-table {
+.sort-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Группа кнопок */
+.button-group {
+  margin-bottom: 20px;
+}
+
+.button-group button {
+  margin-right: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Общий стиль для кнопок */
+.btn {
+  font-size: 0.9rem;
+}
+
+/* Основная кнопка */
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Вторичная кнопка */
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+.btn-secondary:hover {
+  background-color: #565e64;
+}
+
+/* Кнопка для просмотра */
+.btn-info {
+  background-color: #17a2b8;
+  color: #fff;
+}
+.btn-info:hover {
+  background-color: #117a8b;
+}
+
+/* Кнопка для удаления */
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Стилизация таблицы */
+.user-table {
   width: 100%;
   border-collapse: collapse;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.user-table th,
+.user-table td {
+  padding: 12px 15px;
   text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-th {
-  background-color: #f2f2f2;
+.user-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
 }
 
-button {
-  margin-right: 10px;
+.user-table tbody tr:hover {
+  background-color: #f1f1f1;
 }

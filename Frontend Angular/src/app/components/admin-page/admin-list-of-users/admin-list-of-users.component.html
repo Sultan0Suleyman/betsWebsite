@@ -1,10 +1,12 @@
-<p>Sort by role:</p>
-<button (click)="onRoleButton('ROLE_PLAYER')">Player</button>
-<button (click)="onRoleButton('ROLE_SUPPORT')">Support</button>
-<button (click)="onRoleButton('ROLE_LINEMAKER')">Linemaker</button>
-<button (click)="onShowAllButton()">Show All</button>
+<p class="sort-title">Sort by role:</p>
+<div class="button-group">
+  <button class="btn btn-primary" (click)="onRoleButton('ROLE_PLAYER')">Player</button>
+  <button class="btn btn-primary" (click)="onRoleButton('ROLE_SUPPORT')">Support</button>
+  <button class="btn btn-primary" (click)="onRoleButton('ROLE_LINEMAKER')">Linemaker</button>
+  <button class="btn btn-secondary" (click)="onShowAllButton()">Show All</button>
+</div>
 
-<table>
+<table class="user-table">
   <thead>
   <tr>
     <th>Id</th>
@@ -21,8 +23,8 @@
     <td>{{ user.surname }}</td>
     <td>{{ user.role }}</td>
     <td>
-      <button (click)="viewUserDetails(user.id)">View</button>
-      <button (click)="deleteUser(user.id)">Delete</button>
+      <button class="btn btn-info" (click)="viewUserDetails(user.id)">View</button>
+      <button class="btn btn-danger" (click)="deleteUser(user.id)">Delete</button>
     </td>
   </tr>
   </tbody>

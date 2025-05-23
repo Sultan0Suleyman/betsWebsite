@@ -1,4 +1,4 @@
-package com.sobolbetbackend.backendprojektbk1.dto.Admin;
+package com.sobolbetbackend.backendprojektbk1.dto.Admin.listOfUsers;
 
 public class UserEDTO {
     private Long id;

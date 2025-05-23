@@ -41,6 +41,9 @@ import { AdminNavBarComponent } from './components/admin-page/admin-nav-bar/admi
 import { AdminListOfUsersComponent } from './components/admin-page/admin-list-of-users/admin-list-of-users.component';
 import { AdminWorkerRegistrationComponent } from './components/admin-page/admin-worker-registration/admin-worker-registration.component';
 import { ContractModalComponent } from './components/admin-page/admin-worker-registration/contract-modal/contract-modal.component';
+import { ViewUserInfoComponent } from './components/admin-page/admin-list-of-users/view-user-info/view-user-info.component';
+import { LinemakerPageComponent } from './components/linemaker-page/linemaker-page.component';
+import {LinemakerGuard} from "./guards/LinemakerGuard/linemaker.guard";
 
 const routes: Routes=[
   { path: '', redirectTo: '/player/main-page', pathMatch: 'full' },
@@ -55,7 +58,8 @@ const routes: Routes=[
       { path:'top-up',component: TopUpPageComponent ,canActivate: [PlayerGuard] },
     ]
   },
-  { path: 'admin', component: AdminPageComponent, canActivate: [AdminGuard] }
+  { path: 'admin', component: AdminPageComponent, canActivate: [AdminGuard] },
+  { path: 'linemaker', component: LinemakerPageComponent, canActivate: [LinemakerGuard] }
   ]
 
 @NgModule({
@@ -83,6 +87,8 @@ const routes: Routes=[
     AdminListOfUsersComponent,
     AdminWorkerRegistrationComponent,
     ContractModalComponent,
+    ViewUserInfoComponent,
+    LinemakerPageComponent,
   ],
   imports: [
     HttpClientModule,
@@ -101,8 +107,6 @@ const routes: Routes=[
     RouterModule
   ],
   providers: [
-    DefaultGuard,
-    AdminGuard,
     AuthService,
     JwtDecodeService,
     {

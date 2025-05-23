@@ -1,7 +1,7 @@
 package com.sobolbetbackend.backendprojektbk1.service.adminServices.workerRegistrationService;
 
 import com.sobolbetbackend.backendprojektbk1.dto.Admin.workerRegistration.ContractDTO;
-import com.sobolbetbackend.backendprojektbk1.dto.Admin.workerRegistration.WorkerDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Admin.workerRegistration.WorkerCredentialDTO;
 import com.sobolbetbackend.backendprojektbk1.entity.Linemaker;
 import com.sobolbetbackend.backendprojektbk1.entity.Support;
 import com.sobolbetbackend.backendprojektbk1.entity.common.UserE;
@@ -41,23 +41,23 @@ public class WorkerRegistrationService {
     }
 
     @Transactional
-    public void registration(WorkerDTO workerDTO) throws UserAlreadyRegisteredException, EmailAlreadyExistsException {
-        if(userRepo.findByEmail(workerDTO.getEmail())!=null){
+    public void registration(WorkerCredentialDTO workerCredentialDTO) throws UserAlreadyRegisteredException, EmailAlreadyExistsException {
+        if(userRepo.findByEmail(workerCredentialDTO.getEmail())!=null){
             throw new EmailAlreadyExistsException("User with this email already exists!");
-        }if(userRepo.findByNumberOfPassport(workerDTO.getNumberOfPassport())!=null){
+        }if(userRepo.findByNumberOfPassport(workerCredentialDTO.getNumberOfPassport())!=null){
             throw new UserAlreadyRegisteredException("User already has an account on our service");
         }
 
-        WorkerRole workerRole = WorkerRole.fromFrontend(workerDTO.getRole());
+        WorkerRole workerRole = WorkerRole.fromFrontend(workerCredentialDTO.getRole());
 
         Role dbRole = roleRepo.findByName(workerRole.getDbRoleName());
 
-        UserE user = userRepo.save(saveWorkerDataIntoDatabase(workerDTO,dbRole));
+        UserE user = userRepo.save(saveWorkerDataIntoDatabase(workerCredentialDTO,dbRole));
 
         Worker worker = workerRole.createWorkerInstance();
 
         worker.setUser(user);
-        Contract contract = getContractInstanceFromFrontend(workerDTO.getContract(),worker);
+        Contract contract = getContractInstanceFromFrontend(workerCredentialDTO.getContract(),worker);
 
         worker.setContract(contract);
 
@@ -86,16 +86,16 @@ public class WorkerRegistrationService {
         return contract1;
     }
 
-    private UserE saveWorkerDataIntoDatabase(WorkerDTO workerDTO, Role workerRole){
+    private UserE saveWorkerDataIntoDatabase(WorkerCredentialDTO workerCredentialDTO, Role workerRole){
         UserE user = new UserE();
-        user.setPassword(passwordEncoder.encode(workerDTO.getPassword()));
+        user.setPassword(passwordEncoder.encode(workerCredentialDTO.getPassword()));
         user.setRoles(Collections.singletonList(workerRole));
-        user.setName(workerDTO.getName());
-        user.setEmail(workerDTO.getEmail());
-        user.setSurname(workerDTO.getSurname());
-        user.setNumberOfPassport(workerDTO.getNumberOfPassport());
-        user.setPassportIssueDate(workerDTO.getPassportIssueDate());
-        user.setPassportIssuingAuthority(workerDTO.getPassportIssuingAuthority());
+        user.setName(workerCredentialDTO.getName());
+        user.setEmail(workerCredentialDTO.getEmail());
+        user.setSurname(workerCredentialDTO.getSurname());
+        user.setNumberOfPassport(workerCredentialDTO.getNumberOfPassport());
+        user.setPassportIssueDate(workerCredentialDTO.getPassportIssueDate());
+        user.setPassportIssuingAuthority(workerCredentialDTO.getPassportIssuingAuthority());
 
         return user;
     }

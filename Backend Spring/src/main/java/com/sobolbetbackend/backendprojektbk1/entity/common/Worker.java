@@ -42,4 +42,10 @@ public abstract class Worker {
     public void setContract(Contract contract) {
         this.contract = contract;
     }
+
+    public String getWorkerType() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class) != null
+                ? this.getClass().getAnnotation(DiscriminatorValue.class).value()
+                : "Unknown";
+    }
 }

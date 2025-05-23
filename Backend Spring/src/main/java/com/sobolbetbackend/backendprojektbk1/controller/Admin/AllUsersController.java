@@ -1,6 +1,8 @@
 package com.sobolbetbackend.backendprojektbk1.controller.Admin;
 
-import com.sobolbetbackend.backendprojektbk1.dto.Admin.UserEDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Admin.listOfUsers.UserEDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Admin.listOfUsers.UserInfoDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Admin.workerRegistration.WorkerCredentialDTO;
 import com.sobolbetbackend.backendprojektbk1.service.adminServices.usersServices.AdminUserEService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +34,10 @@ public class AllUsersController {
     public ResponseEntity<String> deleteUser(@PathVariable Long id){
         adminUserEService.deleteUser(id);
         return ResponseEntity.ok().body("{\"message\": \"User with id "+id+" was successfully deleted\"}");
+    }
+
+    @GetMapping("/user/info/{id}")
+    public ResponseEntity<UserInfoDTO> getUserInfo(@PathVariable Long id){
+        return ResponseEntity.ok(adminUserEService.getUserInfo(id));
     }
 }

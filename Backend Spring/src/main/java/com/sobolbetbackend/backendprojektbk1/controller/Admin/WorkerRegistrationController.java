@@ -1,11 +1,9 @@
 package com.sobolbetbackend.backendprojektbk1.controller.Admin;
 
-import com.sobolbetbackend.backendprojektbk1.dto.Admin.workerRegistration.WorkerDTO;
-import com.sobolbetbackend.backendprojektbk1.entity.common.UserE;
+import com.sobolbetbackend.backendprojektbk1.dto.Admin.workerRegistration.WorkerCredentialDTO;
 import com.sobolbetbackend.backendprojektbk1.exception.EmailAlreadyExistsException;
 import com.sobolbetbackend.backendprojektbk1.exception.UserAlreadyRegisteredException;
 import com.sobolbetbackend.backendprojektbk1.service.adminServices.workerRegistrationService.WorkerRegistrationService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +23,7 @@ public class WorkerRegistrationController {
     }
 
     @PostMapping("/worker-registration")
-    public ResponseEntity<String> registration(@RequestBody WorkerDTO worker) {
+    public ResponseEntity<String> registration(@RequestBody WorkerCredentialDTO worker) {
         try {
             workerRegistrationService.registration(worker);
             return ResponseEntity.ok().body("{\"message\": \"Worker was successfully registered\"}");

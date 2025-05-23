@@ -6,7 +6,8 @@
     "types": []
   },
   "files": [
-    "src/main.ts"
+    "src/main.ts",
+    "src/app/components/admin-page/models/user-info.ts"
   ],
   "include": [
     "src/**/*.d.ts"
