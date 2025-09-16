@@ -3,6 +3,8 @@ package com.sobolbetbackend.backendprojektbk1.entity.events.sideInfo;
 import com.sobolbetbackend.backendprojektbk1.entity.events.bet.BettingEvent;
 import com.sobolbetbackend.backendprojektbk1.entity.events.bet.OrdinaryBet;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,33 +12,66 @@ import java.util.Objects;
 
 @Entity
 public class Game {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Setter
+    @Getter
     @OneToOne(mappedBy = "game")
     private BettingEvent bettingEvent;
+    @Setter
+    @Getter
     @ManyToOne
     @JoinColumn(name = "team_home", referencedColumnName = "name_en")
     private Team teamHome;
+    @Setter
+    @Getter
     @ManyToOne
     @JoinColumn(name = "team_away", referencedColumnName = "name_en")
     private Team teamAway;
+    @Setter
+    @Getter
     @ManyToOne
     @JoinColumn(name = "league", referencedColumnName = "name_en")
     private League league;
+    @Setter
+    @Getter
     @ManyToOne
     @JoinColumn(name = "sport", referencedColumnName = "name_en")
     private Sport sport;
 
+    @Setter
+    @Getter
     @ManyToOne
     @JoinColumn(name = "country", referencedColumnName = "name_en")
     private Country country;
+    @Setter
+    @Getter
     private LocalDateTime dateOfMatch;
+    @Setter
+    @Getter
     private Integer scoreTeamHome;
+    @Setter
+    @Getter
     private Integer scoreTeamAway;
+    @Setter
+    @Getter
+    private Integer extraTimeHomeScore; // Счет в доп.время
+    @Setter
+    @Getter
+    private Integer extraTimeAwayScore;
+    @Setter
+    @Getter
+    private Integer penaltyHomeScore;   // Счет по пенальти
+    @Setter
+    @Getter
+    private Integer penaltyAwayScore;
     private Boolean isGameEnded;
     private Boolean isGameInLive;
     private Boolean isGamePosted;
+    @Setter
+    @Getter
     @OneToMany(mappedBy = "game")
     private List<OrdinaryBet> bets;
 
@@ -65,94 +100,6 @@ public class Game {
 
     public void setGamePosted(Boolean gamePosted) {
         isGamePosted = gamePosted;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<OrdinaryBet> getBets() {
-        return bets;
-    }
-
-    public void setBets(List<OrdinaryBet> bets) {
-        this.bets = bets;
-    }
-
-    public Team getTeamHome() {
-        return teamHome;
-    }
-
-    public void setTeamHome(Team teamHome) {
-        this.teamHome = teamHome;
-    }
-
-    public Team getTeamAway() {
-        return teamAway;
-    }
-
-    public void setTeamAway(Team teamAway) {
-        this.teamAway = teamAway;
-    }
-
-    public LocalDateTime getDateOfMatch() {
-        return dateOfMatch;
-    }
-
-    public void setDateOfMatch(LocalDateTime dateOfMatch) {
-        this.dateOfMatch = dateOfMatch;
-    }
-
-    public Integer getScoreTeamHome() {
-        return scoreTeamHome;
-    }
-
-    public void setScoreTeamHome(Integer scoreTeamHome) {
-        this.scoreTeamHome = scoreTeamHome;
-    }
-
-    public Integer getScoreTeamAway() {
-        return scoreTeamAway;
-    }
-
-    public League getLeague() {
-        return league;
-    }
-
-    public void setLeague(League league) {
-        this.league = league;
-    }
-
-    public Sport getSport() {
-        return sport;
-    }
-
-    public void setSport(Sport sport) {
-        this.sport = sport;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
-    public void setScoreTeamAway(Integer scoreTeamAway) {
-        this.scoreTeamAway = scoreTeamAway;
-    }
-
-    public BettingEvent getBettingEvent() {
-        return bettingEvent;
-    }
-
-    public void setBettingEvent(BettingEvent bettingEvent) {
-        this.bettingEvent = bettingEvent;
     }
 
     public Boolean getGameEnded() {
