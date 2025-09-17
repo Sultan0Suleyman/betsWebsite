@@ -42,6 +42,12 @@ export class BetHistoryContentComponent implements OnInit {
 
         this.unsettledBets = response.filter(bet => bet.finalBetPayout === null);
         this.paidBets = response.filter(bet => bet.finalBetPayout !== null);
+
+        console.log('Paid bets:', this.paidBets);
+        this.paidBets.forEach(bet => {
+          console.log(`Bet ${bet.id}: betStatus = ${bet.betStatus} (type: ${typeof bet.betStatus})`);
+        });
+
         if (response.length === 0) {
           this.message = "History is empty";
         }
@@ -52,33 +58,81 @@ export class BetHistoryContentComponent implements OnInit {
     });
   }
 
-  onBetClick(fullBetId: number,betAmount?: number) {
+  onBetClick(fullBetId: number, betAmount?: number) {
     const apiUrl = `http://localhost:8080/bet/list/ordinaryBets/${fullBetId}`;
     this.isBetClicked = !this.isBetClicked
 
-      if (this.selectedBet !== fullBetId || this.isBetClicked) {
-        this.buttonAppearanceChecker = true
-        this.selectedBet = fullBetId
+    if (this.selectedBet !== fullBetId || this.isBetClicked) {
+      this.buttonAppearanceChecker = true
+      this.selectedBet = fullBetId
 
-        this.parentBetId = fullBetId
-        this.http.get<any>(apiUrl).subscribe({
-          next: (response) => {
-            console.log(response)
-            this.ordinaryBets = response
-            if (typeof betAmount !== 'undefined') {
-              this.sellButtonMessage = 'Sell for ' + (betAmount * 0.9).toFixed(2);
+      this.parentBetId = fullBetId
+      this.http.get<any>(apiUrl).subscribe({
+        next: (response) => {
+          console.log('=== ORDINARY BETS DEBUG ===');
+          console.log('Full response:', response);
+          console.log('Response length:', response.length);
+
+          // Детальная отладка каждой ставки
+          response.forEach((bet: any, index: number) => {
+            console.log(`\n--- Ordinary bet ${index + 1} ---`);
+            console.log('Team match:', `${bet.teamHome} vs ${bet.teamAway}`);
+            console.log('winningBet:', bet.winningBet, '(type:', typeof bet.winningBet, ')');
+            console.log('isGameEnded:', bet.isGameEnded, '(type:', typeof bet.isGameEnded, ')');
+            console.log('dateOfMatch:', bet.dateOfMatch);
+            console.log('outcomeOfTheGame:', bet.outcomeOfTheGame);
+            console.log('coefficient:', bet.coefficient);
+
+            // Проверка логики статуса
+            let expectedStatus = '';
+            let expectedColor = '';
+
+            if (bet.winningBet === null && !bet.isGameEnded) {
+              expectedStatus = 'Unsettled';
+              expectedColor = 'orange';
+            } else if (bet.winningBet === null && bet.isGameEnded) {
+              expectedStatus = 'Refund';
+              expectedColor = 'green';
+            } else if (bet.winningBet === true && bet.isGameEnded) {
+              expectedStatus = 'Win';
+              expectedColor = 'green';
+            } else if (bet.winningBet === false && bet.isGameEnded) {
+              expectedStatus = 'Lose';
+              expectedColor = 'red';
+            } else {
+              expectedStatus = 'UNKNOWN CASE';
+              expectedColor = 'black';
             }
-          },
-          error: (error) => {
-            console.log(error)
-          }
-        });
-      } else if (!this.isBetClicked) {
-        this.selectedBet = 0
-        this.ordinaryBets = []
-        this.buttonAppearanceChecker = false
-      }
 
+            console.log('Expected status:', expectedStatus);
+            console.log('Expected color:', expectedColor);
+          });
+
+          console.log('=== END DEBUG ===\n');
+
+          this.ordinaryBets = response;
+
+          // Запросить актуальную цену продажи с бэкенда
+          this.http.get<number>(`http://localhost:8080/bet/sell-price/${fullBetId}`).subscribe({
+            next: (sellPrice) => {
+              this.sellButtonMessage = `Sell for ${sellPrice.toFixed(2)}€`;
+              console.log('Sell price from backend:', sellPrice);
+            },
+            error: (error) => {
+              console.log('Error fetching sell price:', error);
+              this.sellButtonMessage = 'Cannot sell now';
+            }
+          });
+        },
+        error: (error) => {
+          console.log('Error fetching ordinary bets:', error)
+        }
+      });
+    } else if (!this.isBetClicked) {
+      this.selectedBet = 0
+      this.ordinaryBets = []
+      this.buttonAppearanceChecker = false
+    }
   }
 
   getCurrentDate(): Date {

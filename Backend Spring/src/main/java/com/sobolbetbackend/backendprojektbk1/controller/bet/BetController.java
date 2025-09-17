@@ -49,6 +49,16 @@ public class BetController {
         return ResponseEntity.ok(fullBetService.getListOfOrdinaryBets(fullBetId));
     }
 
+    @GetMapping("/sell-price/{fullBetId}")
+    public ResponseEntity<Double> calculateSellPrice(@PathVariable Long fullBetId) {
+        try {
+            double sellPrice = fullBetService.calculateSellPrice(fullBetId);
+            return ResponseEntity.ok(sellPrice);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0.0);
+        }
+    }
+
     @PutMapping("/sell")
     public ResponseEntity<String> sellBet(@RequestBody Long fullBetId) {
         System.out.println("FullBet"+fullBetId);
