@@ -116,15 +116,22 @@ public class BetResultService {
                     double payout = fullBet.getBetAmount() * fullBet.getFinalCoefficient();
                     fullBet.setFinalBetPayout(payout);
                     fullBet.setBetStatus(true);
-
-                    // Credit player balance
                     fullBet.getPlayer().updateBalance(payout);
                     totalPayouts += payout;
 
                 } else {
-                    // Lost
-                    fullBet.setFinalBetPayout(0.0);
-                    fullBet.setBetStatus(false);
+                    // Check if express is ready for processing
+                    boolean allGamesFinished = fullBet.getBets().stream()
+                            .allMatch(bet -> bet.getGame().getGameEnded());
+
+                    if (allGamesFinished) {
+                        // Express lost (all games finished but not won)
+                        fullBet.setFinalBetPayout(0.0);
+                        fullBet.setBetStatus(false);
+                    } else {
+                        // Express not ready - don't process y
+                        continue; // Skip processing
+                    }
                 }
 
             } catch (Exception e) {
