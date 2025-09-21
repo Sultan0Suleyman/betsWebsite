@@ -1,0 +1,193 @@
+<div class="create-match-container">
+  <!-- Header -->
+  <div class="page-header">
+    <h1 class="page-title">
+      <i class="fas fa-plus-circle"></i>
+      Create New Match
+    </h1>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading data...</p>
+  </div>
+
+  <!-- Main Form -->
+  <div *ngIf="!isLoading" class="form-container">
+    <form [formGroup]="createMatchForm" (ngSubmit)="onSubmit()">
+
+      <!-- Sport & Country Selection -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="sport" class="form-label required">Sport</label>
+          <select
+            id="sport"
+            formControlName="sport"
+            class="form-control"
+            [class.error]="isFieldInvalid('sport')">
+            <option value="">Select Sport</option>
+            <option *ngFor="let sport of sports" [value]="sport.name_en">
+              {{sport.name_en}}
+            </option>
+          </select>
+          <div *ngIf="isFieldInvalid('sport')" class="error-message">
+            {{getFieldError('sport')}}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="country" class="form-label">Country</label>
+          <select
+            id="country"
+            formControlName="country"
+            class="form-control"
+            [class.error]="isFieldInvalid('country')">
+            <option value="">Select Country</option>
+            <option *ngFor="let country of countries" [value]="country.name_en">
+              {{country.name_en}}
+            </option>
+          </select>
+          <div *ngIf="isFieldInvalid('country')" class="error-message">
+            {{getFieldError('country')}}
+          </div>
+        </div>
+      </div>
+
+      <!-- League Selection -->
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="league" class="form-label required">League</label>
+          <select
+            id="league"
+            formControlName="league"
+            class="form-control"
+            [class.error]="isFieldInvalid('league')"
+            [disabled]="filteredLeagues.length === 0">
+            <option value="">Select League</option>
+            <option *ngFor="let league of filteredLeagues" [value]="league.name_en">
+              {{league.name_en}}
+            </option>
+          </select>
+          <div *ngIf="isFieldInvalid('league')" class="error-message">
+            {{getFieldError('league')}}
+          </div>
+          <div *ngIf="filteredLeagues.length === 0 && (createMatchForm.get('sport')?.value || createMatchForm.get('country')?.value)"
+               class="info-message">
+            No leagues available for selected sport and country combination
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Selection -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="teamHome" class="form-label required">Home Team</label>
+          <select
+            id="teamHome"
+            formControlName="teamHome"
+            class="form-control"
+            [class.error]="isFieldInvalid('teamHome')"
+            [disabled]="filteredHomeTeams.length === 0">
+            <option value="">Select Home Team</option>
+            <option *ngFor="let team of filteredHomeTeams" [value]="team.name_en">
+              {{team.name_en}}
+            </option>
+          </select>
+          <div *ngIf="isFieldInvalid('teamHome')" class="error-message">
+            {{getFieldError('teamHome')}}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="teamAway" class="form-label required">Away Team</label>
+          <select
+            id="teamAway"
+            formControlName="teamAway"
+            class="form-control"
+            [class.error]="isFieldInvalid('teamAway')"
+            [disabled]="filteredAwayTeams.length === 0">
+            <option value="">Select Away Team</option>
+            <option *ngFor="let team of filteredAwayTeams" [value]="team.name_en">
+              {{team.name_en}}
+            </option>
+          </select>
+          <div *ngIf="isFieldInvalid('teamAway')" class="error-message">
+            {{getFieldError('teamAway')}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Date & Time Selection -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="dateOfMatch" class="form-label required">Match Date</label>
+          <input
+            type="date"
+            id="dateOfMatch"
+            formControlName="dateOfMatch"
+            class="form-control"
+            [class.error]="isFieldInvalid('dateOfMatch')"
+            [min]="getTodayDate()">
+          <div *ngIf="isFieldInvalid('dateOfMatch')" class="error-message">
+            {{getFieldError('dateOfMatch')}}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="timeOfMatch" class="form-label required">Match Time</label>
+          <input
+            type="time"
+            id="timeOfMatch"
+            formControlName="timeOfMatch"
+            class="form-control"
+            [class.error]="isFieldInvalid('timeOfMatch')">
+          <div *ngIf="isFieldInvalid('timeOfMatch')" class="error-message">
+            {{getFieldError('timeOfMatch')}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Match Preview -->
+      <div *ngIf="createMatchForm.get('teamHome')?.value && createMatchForm.get('teamAway')?.value"
+           class="match-preview">
+        <h3>Match Preview</h3>
+        <div class="preview-content">
+          <div class="match-info">
+            <div class="teams">
+              <span class="team home">{{createMatchForm.get('teamHome')?.value}}</span>
+              <span class="vs">vs</span>
+              <span class="team away">{{createMatchForm.get('teamAway')?.value}}</span>
+            </div>
+            <div class="match-details">
+              <span class="league">{{createMatchForm.get('league')?.value}}</span>
+              <span class="date" *ngIf="createMatchForm.get('dateOfMatch')?.value && createMatchForm.get('timeOfMatch')?.value">
+                {{createMatchForm.get('dateOfMatch')?.value}} at {{createMatchForm.get('timeOfMatch')?.value}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onCancel()"
+          [disabled]="isSubmitting">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!createMatchForm.valid || isSubmitting">
+          <span *ngIf="isSubmitting" class="spinner-sm"></span>
+          <i *ngIf="!isSubmitting" class="fas fa-save"></i>
+          {{isSubmitting ? 'Creating...' : 'Create Match'}}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

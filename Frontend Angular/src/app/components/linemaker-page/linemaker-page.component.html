@@ -1,1 +1,23 @@
-<p>linemaker-page works!</p>
+<header>
+  <app-linemaker-nav-bar (unpublishedMatchesClicked)="onIsUnpublishedMatchesClicked()"
+                         (lineMatchesClicked)="onIsLineMatchesClicked()"
+                         (liveMatchesClicked)="onIsLiveMatchesClicked()"
+                         (createMatchClicked)="onIsCreateMatchClicked()">
+  </app-linemaker-nav-bar>
+</header>
+
+<ng-container *ngIf="isUnpublishedMatchesClicked">
+  <app-linemaker-unpublished-matches></app-linemaker-unpublished-matches>
+</ng-container>
+
+<ng-container *ngIf="isLineMatchesClicked">
+  <app-linemaker-line-matches></app-linemaker-line-matches>
+</ng-container>
+
+<ng-container *ngIf="isLiveMatchesClicked">
+  <app-linemaker-live-matches></app-linemaker-live-matches>
+</ng-container>
+
+<ng-container *ngIf="isCreateMatchClicked">
+  <app-linemaker-create-match></app-linemaker-create-match>
+</ng-container>

@@ -12,6 +12,7 @@ import java.util.Objects;
 
 @Entity
 public class Game {
+    @Setter
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

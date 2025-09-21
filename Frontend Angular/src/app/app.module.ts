@@ -44,6 +44,11 @@ import { ContractModalComponent } from './components/admin-page/admin-worker-reg
 import { ViewUserInfoComponent } from './components/admin-page/admin-list-of-users/view-user-info/view-user-info.component';
 import { LinemakerPageComponent } from './components/linemaker-page/linemaker-page.component';
 import {LinemakerGuard} from "./guards/LinemakerGuard/linemaker.guard";
+import { LinemakerNavBarComponent } from './components/linemaker-page/linemaker-nav-bar/linemaker-nav-bar.component';
+import { LinemakerLineMatchesComponent } from './components/linemaker-page/linemaker-line-matches/linemaker-line-matches.component';
+import { LinemakerLiveMatchesComponent } from './components/linemaker-page/linemaker-live-matches/linemaker-live-matches.component';
+import { LinemakerCreateMatchComponent } from './components/linemaker-page/linemaker-create-match/linemaker-create-match.component';
+import { LinemakerUnpublishedMatchesComponent } from './components/linemaker-page/linemaker-unpublished-matches/linemaker-unpublished-matches.component';
 
 const routes: Routes=[
   { path: '', redirectTo: '/player/main-page', pathMatch: 'full' },
@@ -89,6 +94,11 @@ const routes: Routes=[
     ContractModalComponent,
     ViewUserInfoComponent,
     LinemakerPageComponent,
+    LinemakerNavBarComponent,
+    LinemakerLineMatchesComponent,
+    LinemakerLiveMatchesComponent,
+    LinemakerCreateMatchComponent,
+    LinemakerUnpublishedMatchesComponent,
   ],
   imports: [
     HttpClientModule,
