@@ -35,5 +35,6 @@ export class LinemakerNavBarComponent {
 
   onLogout(): void{
     this.authService.logout();
+    this.authService.clearCachedNameSurname()
   }
 }

@@ -49,6 +49,7 @@ import { LinemakerLineMatchesComponent } from './components/linemaker-page/linem
 import { LinemakerLiveMatchesComponent } from './components/linemaker-page/linemaker-live-matches/linemaker-live-matches.component';
 import { LinemakerCreateMatchComponent } from './components/linemaker-page/linemaker-create-match/linemaker-create-match.component';
 import { LinemakerUnpublishedMatchesComponent } from './components/linemaker-page/linemaker-unpublished-matches/linemaker-unpublished-matches.component';
+import { LinemakerSetOddsMatchComponent } from './components/linemaker-page/linemaker-set-odds-match/linemaker-set-odds-match.component';
 
 const routes: Routes=[
   { path: '', redirectTo: '/player/main-page', pathMatch: 'full' },
@@ -99,6 +100,7 @@ const routes: Routes=[
     LinemakerLiveMatchesComponent,
     LinemakerCreateMatchComponent,
     LinemakerUnpublishedMatchesComponent,
+    LinemakerSetOddsMatchComponent,
   ],
   imports: [
     HttpClientModule,

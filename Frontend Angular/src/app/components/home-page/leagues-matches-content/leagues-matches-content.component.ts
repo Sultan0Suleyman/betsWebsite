@@ -53,4 +53,10 @@ export class LeaguesMatchesContentComponent implements OnChanges {
     // this.selectedIdOfMatch = (this.selectedIdOfMatch === gameId) ? 0 : gameId;
     this.idOfMatchSelected.emit({gameId: gameId });
   }
+
+  getBetValue(game: any, type: string): number | null {
+    if (!game.bets) return null;
+    const bet = game.bets.find((b: any) => b.type === type);
+    return bet ? bet.value : null;
+  }
 }

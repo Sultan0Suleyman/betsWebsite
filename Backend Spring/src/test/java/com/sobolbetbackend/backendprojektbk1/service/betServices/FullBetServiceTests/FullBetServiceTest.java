@@ -1,4 +1,4 @@
-package com.sobolbetbackend.backendprojektbk1.service.betServices;
+package com.sobolbetbackend.backendprojektbk1.service.betServices.FullBetServiceTests;
 
 import com.sobolbetbackend.backendprojektbk1.dto.betsInfo.betList.FullBetDTO;
 import com.sobolbetbackend.backendprojektbk1.dto.betsInfo.betList.OrdinaryBetDTO;
@@ -14,6 +14,7 @@ import com.sobolbetbackend.backendprojektbk1.repository.mainEventsRepos.GameRepo
 import com.sobolbetbackend.backendprojektbk1.repository.placeBet.FullBetRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.placeBet.OrdinaryBetRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.playerRegistrationRepos.PlayerRepo;
+import com.sobolbetbackend.backendprojektbk1.service.betServices.FullBetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

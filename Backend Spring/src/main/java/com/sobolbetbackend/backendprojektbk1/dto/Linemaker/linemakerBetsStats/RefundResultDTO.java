@@ -1,4 +1,4 @@
-package com.sobolbetbackend.backendprojektbk1.dto.linemakerBetsStats;
+package com.sobolbetbackend.backendprojektbk1.dto.Linemaker.linemakerBetsStats;
 
 import lombok.Getter;
 import lombok.Setter;

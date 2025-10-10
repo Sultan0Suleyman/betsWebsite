@@ -1,5 +1,7 @@
 package com.sobolbetbackend.backendprojektbk1.dto.betsInfo.betList;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 
 public class OrdinaryBetDTO {
@@ -9,6 +11,7 @@ public class OrdinaryBetDTO {
     private String outcomeOfTheGame;
     private Double coefficient;
     private Boolean winningBet;
+    @JsonProperty("isGameEnded")
     private boolean isGameEnded;
 
     public OrdinaryBetDTO(String teamHome, String teamAway,

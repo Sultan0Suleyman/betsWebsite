@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, of, tap, throwError} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { JwtDecodeService } from '../JwtDecodeService/jwt-decode.service';
 import {ActivationStart, Router} from "@angular/router";
@@ -12,6 +12,8 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   private token: string | null = null;
   private lastRefreshedToken: string | null = null;
+  private cachedNameSurname: { firstName: string; lastName: string } | null = null;
+
 
   private readonly loginUrl = 'http://localhost:8080/login-endpoint';
   private readonly refreshAccessTokenUrl = 'http://localhost:8080/jwt-refresh-token-logic/refresh-access-token-endpoint';
@@ -185,5 +187,70 @@ export class AuthService {
     }
 
     return null;  // Если роль не найдена
+  }
+  public getCurrentUsersNameSurname(username: string): Observable<{ firstName: string; lastName: string }> {
+    // сначала проверяем кеш в памяти
+    if (this.cachedNameSurname) {
+      return of(this.cachedNameSurname);
+    }
+
+    // проверяем sessionStorage
+    const stored = sessionStorage.getItem('cachedNameSurname');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed?.firstName && parsed?.lastName) {
+          this.cachedNameSurname = parsed;
+          return of(parsed);
+        }
+      } catch {
+        // если JSON некорректный, игнорируем
+      }
+    }
+
+    // делаем запрос на бэк
+    return this.http
+      .get<{ firstName: string; lastName: string }>(
+        'http://localhost:8080/linemaker/me',
+        { params: { username } }
+      )
+      .pipe(
+        tap(data => {
+          // гарантируем, что данные корректные
+          if (data?.firstName && data?.lastName) {
+            this.cachedNameSurname = data;
+            sessionStorage.setItem('cachedNameSurname', JSON.stringify(data));
+          }
+        }),
+        map(data => ({
+          firstName: data?.firstName ?? '',
+          lastName: data?.lastName ?? ''
+        }))
+      );
+  }
+
+// Получение из кеша (memory + sessionStorage)
+  public getCachedNameSurname(): { firstName: string; lastName: string } {
+    if (this.cachedNameSurname) return this.cachedNameSurname;
+
+    const stored = sessionStorage.getItem('cachedNameSurname');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed?.firstName && parsed?.lastName) {
+          this.cachedNameSurname = parsed;
+          return parsed;
+        }
+      } catch {}
+    }
+
+    // Если нет данных, возвращаем пустой объект
+    return { firstName: '', lastName: '' };
+  }
+
+// Очистка кеша при logout
+  public clearCachedNameSurname(): void {
+    this.cachedNameSurname = null;
+    sessionStorage.removeItem('cachedNameSurname');
   }
 }

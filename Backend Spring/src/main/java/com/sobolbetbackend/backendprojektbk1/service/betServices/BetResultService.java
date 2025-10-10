@@ -1,7 +1,7 @@
 package com.sobolbetbackend.backendprojektbk1.service.betServices;
 
-import com.sobolbetbackend.backendprojektbk1.dto.linemakerBetsStats.BetCalculationResultDTO;
-import com.sobolbetbackend.backendprojektbk1.dto.linemakerBetsStats.RefundResultDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Linemaker.linemakerBetsStats.BetCalculationResultDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Linemaker.linemakerBetsStats.RefundResultDTO;
 import com.sobolbetbackend.backendprojektbk1.entity.events.bet.FullBet;
 import com.sobolbetbackend.backendprojektbk1.entity.events.bet.OrdinaryBet;
 import com.sobolbetbackend.backendprojektbk1.entity.events.sideInfo.Game;

@@ -9,6 +9,7 @@ import com.sobolbetbackend.backendprojektbk1.repository.eventSideInfosRepos.Team
 import com.sobolbetbackend.backendprojektbk1.repository.mainEventsRepos.GameRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -101,6 +102,7 @@ public class CreateMatchService {
      * @param matchDTO the data transfer object containing match creation details
      * @throws IllegalArgumentException if any entity is not found or if a duplicate match exists
      */
+    @Transactional
     public void createMatch(CreatedMatchDTO matchDTO) {
         // Parse date and time
         LocalDateTime matchDateTime = LocalDateTime.parse(matchDTO.getDateOfMatch());

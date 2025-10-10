@@ -4,79 +4,145 @@
   padding: 20px;
 }
 
-.game-container {
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+.game-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 18px 25px;
+  margin-bottom: 25px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.game-info {
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #333; /* Set the text color to a darker shade */
+.game-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-.game-info p {
-  margin: 5px 0; /* Adjust the margin for better spacing */
-}
-
-.game-info p:first-child {
-  font-size: 18px; /* Increase font size for the date */
-}
-
-.game-info p:last-child {
-  font-size: 16px; /* Decrease font size for the team names */
-  color: #555; /* Set a slightly darker color for the team names */
-}
-
-.odds-container {
+.game-header {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap; /* Позволяет элементам переноситься на следующую строку при нехватке места */
+  align-items: center;
+  margin-bottom: 12px;
 }
 
-.odds {
-  padding: 8px;
-  margin: 0;
-  margin-bottom: 10px; /* Добавим отступ снизу для создания промежутка между ставками */
-  background-color: #4CAF50;
+.match-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.match-date {
+  font-size: 14px;
+  color: #777;
+}
+
+.match-teams {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.match-teams span {
+  color: #888;
+  font-weight: normal;
+}
+
+.go-button {
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 15px;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-/* Стили для первых трех ставок (слева) */
-.odds.left {
-  flex: 1; /* Занимает всю доступную ширину на текущей строке */
+.go-button:hover {
+  background-color: #0056b3;
 }
 
-/* Стили для последних двух ставок (справа) */
-.odds.right {
-  flex: 1; /* Занимает всю доступную ширину на текущей строке */
-}
-
-.stake-button {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
+.odds-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Основные ставки */
+.odds-group.main {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  justify-content: flex-start;
+}
+
+/* Дополнительные ставки */
+.odds-group.extra {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Ставка (один коэффициент) */
+.odd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: white;
   cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.stake-button:hover {
-  background-color: #2980b9;
-}
-.odds:hover, .odds-clickable {
-  background-color: #45a049;
+.odd:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
 }
 
+/* Основные коэффициенты крупнее */
+.main-odd {
+  width: 90px;
+  height: 60px;
+  background: #28a745;
+  font-size: 15px;
+}
 
+/* Дополнительные — компактнее */
+.extra-odd {
+  width: 65px;
+  height: 45px;
+  background: #34a2eb;
+  font-size: 13px;
+}
+
+/* Последние две ставки (W1INMATCH и W2INMATCH) */
+.extra-odd:nth-last-child(-n+2) {
+  width: 95px; /* Шире для видимости надписи */
+  margin-left: 20px; /* Отступ от предыдущих ставок */
+}
+
+/* Тип и значение */
+.odd-type {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 11px;
+}
+
+.odd-value {
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+/* Для последних двух ставок увеличим шрифт типа */
+.extra-odd:nth-last-child(-n+2) .odd-type {
+  font-size: 10px;
+  letter-spacing: 0.3px;
+}

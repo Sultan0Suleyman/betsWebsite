@@ -1,0 +1,3 @@
+ALTER TABLE game
+    ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'NONE',
+    ADD COLUMN linemakers_name VARCHAR(50) NULL;

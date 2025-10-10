@@ -2,10 +2,13 @@ package com.sobolbetbackend.backendprojektbk1.service.betServices;
 
 import com.sobolbetbackend.backendprojektbk1.dto.betsInfo.BetDTO;
 import com.sobolbetbackend.backendprojektbk1.dto.betsInfo.GameBetsResponseDTO;
+import com.sobolbetbackend.backendprojektbk1.entity.events.bet.BettingEvent;
+import com.sobolbetbackend.backendprojektbk1.entity.events.bet.BettingOdd;
 import com.sobolbetbackend.backendprojektbk1.entity.events.sideInfo.Country;
 import com.sobolbetbackend.backendprojektbk1.entity.events.sideInfo.Game;
 import com.sobolbetbackend.backendprojektbk1.entity.events.sideInfo.League;
 import com.sobolbetbackend.backendprojektbk1.entity.events.sideInfo.Sport;
+import com.sobolbetbackend.backendprojektbk1.repository.Linemaker.BettingOddRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.eventSideInfosRepos.CountryRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.eventSideInfosRepos.LeagueRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.eventSideInfosRepos.SportRepo;
@@ -24,13 +27,15 @@ public class GetListOfBetsService {
     private final GameRepo gameRepo;
     private final CountryRepo countryRepo;
     private final LeagueRepo leagueRepo;
+    private final BettingOddRepo bettingOddRepo;
 
     @Autowired
-    public GetListOfBetsService(SportRepo sportRepo, GameRepo gameRepo, CountryRepo countryRepo, LeagueRepo leagueRepo) {
+    public GetListOfBetsService(SportRepo sportRepo, GameRepo gameRepo, CountryRepo countryRepo, LeagueRepo leagueRepo, BettingOddRepo bettingOddRepo) {
         this.sportRepo = sportRepo;
         this.gameRepo = gameRepo;
         this.countryRepo = countryRepo;
         this.leagueRepo = leagueRepo;
+        this.bettingOddRepo = bettingOddRepo;
     }
 
     @Cacheable(cacheNames = {"sportsCache"})
@@ -72,12 +77,12 @@ public class GetListOfBetsService {
     }
 
     @Cacheable(cacheNames = {"gamesCache"}, key = "#sport + '|' + #country + '|' + #league")
-    public List<GameBetsResponseDTO> getGames(String sport, String country, String league){
+    public List<GameBetsResponseDTO> getGames(String sport, String country, String league) {
         Sport sport1 = sportRepo.findById(sport).orElseThrow();
         Country country1 = countryRepo.findById(country).orElse(null);
         League league1 = leagueRepo.findById(league).orElseThrow();
 
-        List<Game> games = (List<Game>) gameRepo.findAllByCountryAndSportAndLeague(country1,sport1,league1);
+        List<Game> games = (List<Game>)gameRepo.findAllByCountryAndSportAndLeague(country1, sport1, league1);
 
         List<Game> filteredGames = games.stream()
                 .filter(game -> game.getGamePosted() && !game.getGameInLive() && !game.getGameEnded())
@@ -85,40 +90,50 @@ public class GetListOfBetsService {
 
         List<GameBetsResponseDTO> finalList = new ArrayList<>();
 
-        for(Game game: filteredGames){
+        for (Game game : filteredGames) {
+            BettingEvent event = game.getBettingEvent();
+            if (event == null) continue;
+
+            List<BettingOdd> odds = bettingOddRepo.findAllByBettingEvent(event);
             List<BetDTO> bets = new ArrayList<>();
 
-            // Добавлять ставки в список только если они не пустые
-            addBetIfNotEmpty(bets, "Win1", game.getBettingEvent().getWin1());
-            addBetIfNotEmpty(bets, "Draw", game.getBettingEvent().getDraw());
-            addBetIfNotEmpty(bets, "Win2", game.getBettingEvent().getWin2());
-            addBetIfNotEmpty(bets, "Win of 1 team in match", game.getBettingEvent().getW1InMatch());
-            addBetIfNotEmpty(bets, "Win of 2 team in match", game.getBettingEvent().getW2InMatch());
+            for (BettingOdd odd : odds) {
+                if (odd.getValue() != null) {
+                    bets.add(new BetDTO(odd.getType(), odd.getValue()));
+                }
+            }
 
-            finalList.add(new GameBetsResponseDTO(game.getId(),
+            finalList.add(new GameBetsResponseDTO(
+                    game.getId(),
                     game.getTeamHome().getName_en(),
                     game.getTeamAway().getName_en(),
                     game.getDateOfMatch(),
-                    bets));
+                    bets
+            ));
         }
         return finalList;
     }
-    public GameBetsResponseDTO getGameBets(String gameId){
-        Game game = gameRepo.findById(Long.parseLong(gameId)).orElseThrow();
 
+
+    public GameBetsResponseDTO getGameBets(String gameId) {
+        Game game = gameRepo.findById(Long.parseLong(gameId)).orElseThrow();
+        BettingEvent event = game.getBettingEvent();
+        if (event == null) {
+            return new GameBetsResponseDTO(game.getId(),
+                    game.getTeamHome().getName_en(),
+                    game.getTeamAway().getName_en(),
+                    game.getDateOfMatch(),
+                    new ArrayList<>());
+        }
+
+        List<BettingOdd> odds = bettingOddRepo.findAllByBettingEvent(event);
         List<BetDTO> bets = new ArrayList<>();
 
-        // Добавлять ставки в список только если они не пустые
-        addBetIfNotEmpty(bets, "Win1", game.getBettingEvent().getWin1());
-        addBetIfNotEmpty(bets, "Draw", game.getBettingEvent().getDraw());
-        addBetIfNotEmpty(bets, "Win2", game.getBettingEvent().getWin2());
-        addBetIfNotEmpty(bets, "1X", game.getBettingEvent().getX1());
-        addBetIfNotEmpty(bets, "12", game.getBettingEvent().getW12());
-        addBetIfNotEmpty(bets, "2X", game.getBettingEvent().getX2());
-        addBetIfNotEmpty(bets, "Win of 1 team in match", game.getBettingEvent().getW1InMatch());
-        addBetIfNotEmpty(bets, "Win of 2 team in match", game.getBettingEvent().getW2InMatch());
-        addBetIfNotEmpty(bets, "First team scores first", game.getBettingEvent().getFirstTeamScoresFirst());
-        addBetIfNotEmpty(bets, "Second team scores first", game.getBettingEvent().getSecondTeamScoresFirst());
+        for (BettingOdd odd : odds) {
+            if (odd.getValue() != null) {
+                bets.add(new BetDTO(odd.getType(), odd.getValue()));
+            }
+        }
 
         return new GameBetsResponseDTO(
                 game.getId(),
@@ -129,9 +144,9 @@ public class GetListOfBetsService {
         );
     }
 
-    private void addBetIfNotEmpty(List<BetDTO> bets, String type, Double value) {
-        if (value != null) {
-            bets.add(new BetDTO(type, value));
-        }
-    }
+//    private void addBetIfNotEmpty(List<BetDTO> bets, String type, Double value) {
+//        if (value != null) {
+//            bets.add(new BetDTO(type, value));
+//        }
+//    }
 }

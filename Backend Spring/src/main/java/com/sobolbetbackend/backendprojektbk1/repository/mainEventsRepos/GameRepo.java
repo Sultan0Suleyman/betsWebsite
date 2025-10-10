@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface GameRepo extends CrudRepository<Game, Long> {
+    List<Game> findByIsGamePosted(Boolean isGamePosted);
     Iterable<Game> findAllBySport(Sport sport);
     Iterable<Game> findAllByCountryAndSport(Country country, Sport sport);
     Iterable<Game> findAllByCountryAndSportAndLeague(Country country, Sport sport, League league);

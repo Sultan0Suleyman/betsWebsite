@@ -76,6 +76,20 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<OrdinaryBet> bets;
 
+    @Setter
+    @Getter
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.NONE;
+
+    @Setter
+    @Getter
+    private String linemakersName;
+
+    public enum Status {
+        NONE, IN_PROGRESS, PENDING, DONE
+    }
+
     public Game() {
     }
 

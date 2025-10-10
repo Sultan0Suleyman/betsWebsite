@@ -57,6 +57,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/csrf/token").permitAll()
                         .requestMatchers("/admin/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/list/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/linemaker/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/linemaker/create-match").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/linemaker/set-odds").permitAll()
+                        .requestMatchers(HttpMethod.POST,"linemaker/publish-match/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"linemaker/unpublish-match/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH,"/linemaker/match-status").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/linemaker/delete-match/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/player/data/**").permitAll()
                         .requestMatchers("/payment/**").permitAll()
                         .requestMatchers("/bet/**").permitAll()
@@ -72,6 +79,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS","PUT","PATCH","DELETE"));
         configuration.addAllowedHeader("*"); // Разрешить все заголовки
+        configuration.setExposedHeaders(List.of("*")); // Добавьте эту строку
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/players", configuration);
@@ -83,6 +91,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/payment/**", configuration);
         source.registerCorsConfiguration("/bet/**", configuration);
         source.registerCorsConfiguration("/admin/**",configuration);
+        source.registerCorsConfiguration("/linemaker/**", configuration);
         return source;
     }
     @Bean

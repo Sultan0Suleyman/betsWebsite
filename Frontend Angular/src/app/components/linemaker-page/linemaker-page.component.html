@@ -7,7 +7,7 @@
 </header>
 
 <ng-container *ngIf="isUnpublishedMatchesClicked">
-  <app-linemaker-unpublished-matches></app-linemaker-unpublished-matches>
+  <app-linemaker-unpublished-matches (setOddsRequested)="onSetOddsClicked($event)"></app-linemaker-unpublished-matches>
 </ng-container>
 
 <ng-container *ngIf="isLineMatchesClicked">
@@ -20,4 +20,11 @@
 
 <ng-container *ngIf="isCreateMatchClicked">
   <app-linemaker-create-match></app-linemaker-create-match>
+</ng-container>
+
+<!-- Новый компонент для настройки коэффициентов -->
+<ng-container *ngIf="isSetOddsClicked && selectedMatchId">
+  <app-linemaker-set-odds-match [matchId]="selectedMatchId"
+                          (backToList)="goBackToUnpublishedMatches()">
+  </app-linemaker-set-odds-match>
 </ng-container>

@@ -1,12 +1,12 @@
 /* Variables as CSS custom properties */
 :root {
-  --primary-color: #28a745;
+  --primary-color: #11e842;
   --secondary-color: #6c757d;
   --danger-color: #dc3545;
   --warning-color: #ffc107;
   --info-color: #17a2b8;
   --light-color: #f8f9fa;
-  --dark-color: #343a40;
+  --dark-color: #344037;
   --border-color: #dee2e6;
   --border-radius: 8px;
   --box-shadow: 0 2px 4px rgba(0,0,0,0.1);

@@ -1,17 +1,42 @@
 <div class="content">
   <div *ngIf="gamesData && gamesData.length">
-    <div *ngFor="let game of gamesData" class="game-container">
-      <div class="game-info">
-        <p>Date: {{ formatDate(game.dateOfMatch) }}</p>
-        <p>Teams: {{ game.teamHome }} vs {{ game.teamAway }}</p>
-      </div>
-      <div class="odds-container" *ngIf="game.bets">
-        <div *ngFor="let bet of game.bets" class="bet" (click)="this.couponService.handleBetClick(bet,game )">
-          <p class="odds"><strong>{{ bet.type }}:</strong> {{ bet.value }}</p>
+    <div *ngFor="let game of gamesData" class="game-card">
+      <div class="game-header">
+        <div class="match-info">
+          <div class="match-date">{{ formatDate(game.dateOfMatch) }}</div>
+          <div class="match-teams">{{ game.teamHome }} <span>vs</span> {{ game.teamAway }}</div>
         </div>
+        <button class="go-button" (click)="goToGamePage(game.id)">Go to Game</button>
       </div>
-      <div class="stake-container">
-        <button class="stake-button" (click)="goToGamePage(game.id)">Go to Game</button>
+
+      <div class="odds-section" *ngIf="game.bets">
+        <!-- Основные ставки -->
+        <div class="odds-group main">
+          <ng-container *ngFor="let key of ['win1', 'draw', 'win2']">
+            <div
+              class="odd main-odd"
+              *ngIf="getBetValue(game, key) !== null"
+              (click)="couponService.handleBetClick({ type: key, value: getBetValue(game, key) }, game)"
+            >
+              <span class="odd-type">{{ key.toUpperCase() }}</span>
+              <span class="odd-value">{{ getBetValue(game, key) }}</span>
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- Дополнительные ставки -->
+        <div class="odds-group extra">
+          <ng-container *ngFor="let key of ['x1', 'w12', 'x2', 'w1InMatch', 'w2InMatch']">
+            <div
+              class="odd extra-odd"
+              *ngIf="getBetValue(game, key) !== null"
+              (click)="couponService.handleBetClick({ type: key, value: getBetValue(game, key) }, game)"
+            >
+              <span class="odd-type">{{ key.toUpperCase() }}</span>
+              <span class="odd-value">{{ getBetValue(game, key) }}</span>
+            </div>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>

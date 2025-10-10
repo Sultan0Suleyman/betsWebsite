@@ -1,0 +1,139 @@
+<div class="set-odds-container">
+  <div class="page-header">
+    <button class="btn btn-secondary back-btn" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+      Back to List
+    </button>
+    <h1 class="page-title">
+      <i class="fas fa-calculator"></i>
+      Set Odds
+    </h1>
+  </div>
+
+  <!-- Loading / Error -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading match details...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-container">
+    <p class="error-message">{{ errorMessage }}</p>
+    <button class="btn btn-secondary" (click)="loadMatchDetails()">Try Again</button>
+  </div>
+
+  <!-- Main Form -->
+  <div *ngIf="!isLoading && !errorMessage && matchDetails" class="odds-form-container">
+    <div class="match-info-card">
+      <h3>{{ matchDetails.teamHome }} vs {{ matchDetails.teamAway }}</h3>
+      <div class="match-details">
+        <span class="badge sport-badge">{{ matchDetails.sport }}</span>
+        <span class="match-league">{{ matchDetails.league }}</span>
+        <span class="match-country" *ngIf="matchDetails.country">{{ matchDetails.country }}</span>
+        <span class="match-date">{{ formatDate(matchDetails.dateOfMatch) }}</span>
+      </div>
+    </div>
+
+    <div class="odds-form-card">
+      <h4>Set Betting Odds</h4>
+
+      <form (ngSubmit)="saveOdds()" #oddsForm="ngForm">
+        <!-- Базовые ставки -->
+        <div class="odds-row">
+          <div class="odds-item">
+            <label>{{ matchDetails.teamHome }} Win (1)</label>
+            <input type="number" [(ngModel)]="oddsData['win1']" name="win1" step="0.01" class="form-control">
+          </div>
+          <div class="odds-item">
+            <label>Draw (X)</label>
+            <input type="number" [(ngModel)]="oddsData['draw']" name="draw" step="0.01" class="form-control">
+          </div>
+          <div class="odds-item">
+            <label>{{ matchDetails.teamAway }} Win (2)</label>
+            <input type="number" [(ngModel)]="oddsData['win2']" name="win2" step="0.01" class="form-control">
+          </div>
+        </div>
+
+        <div class="odds-row">
+          <div class="odds-item">
+            <label>1X</label>
+            <input type="number" [(ngModel)]="oddsData['x1']" name="x1" step="0.01" class="form-control">
+          </div>
+          <div class="odds-item">
+            <label>12</label>
+            <input type="number" [(ngModel)]="oddsData['w12']" name="w12" step="0.01" class="form-control">
+          </div>
+          <div class="odds-item">
+            <label>X2</label>
+            <input type="number" [(ngModel)]="oddsData['x2']" name="x2" step="0.01" class="form-control">
+          </div>
+        </div>
+
+        <div class="odds-row">
+          <div class="odds-item">
+            <label>W1 In Match</label>
+            <input type="number" [(ngModel)]="oddsData['w1InMatch']" name="w1InMatch" step="0.01" class="form-control">
+          </div>
+          <div class="odds-item">
+            <label>W2 In Match</label>
+            <input type="number" [(ngModel)]="oddsData['w2InMatch']" name="w2InMatch" step="0.01" class="form-control">
+          </div>
+        </div>
+
+        <div class="odds-row">
+          <div class="odds-item">
+            <label>First Team Scores First</label>
+            <input type="number" [(ngModel)]="oddsData['firstTeamScoresFirst']" name="firstTeamScoresFirst" step="0.01" class="form-control">
+          </div>
+          <div class="odds-item">
+            <label>Second Team Scores First</label>
+            <input type="number" [(ngModel)]="oddsData['secondTeamScoresFirst']" name="secondTeamScoresFirst" step="0.01" class="form-control">
+          </div>
+        </div>
+
+        <!-- Пользовательские ставки -->
+        <div class="custom-odds" *ngFor="let entry of oddsData | keyvalue">
+          <div *ngIf="!isDefaultKey(entry.key)" class="odds-item custom">
+            <label>{{ entry.key }}</label>
+            <input type="number" [(ngModel)]="oddsData[entry.key]" [name]="entry.key" step="0.01" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-add" (click)="openAddEventModal()" [disabled]="isPublished || isSaving">
+            <i class="fas fa-plus"></i> Add Event
+          </button>
+
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving || isPublished">
+            <i class="fas fa-save"></i> {{ isSaving ? 'Saving...' : 'Save Odds' }}
+          </button>
+
+          <button type="button"
+                  [ngClass]="isPublished ? 'btn btn-unpublish' : 'btn btn-publish'"
+                  (click)="togglePublish()"
+                  [disabled]="isSaving">
+            <i class="fas" [ngClass]="isPublished ? 'fa-times' : 'fa-check'"></i>
+            {{ isPublished ? 'Unpublish Match' : 'Publish Match' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🧩 Модальное окно добавления события -->
+  <div class="modal-backdrop" *ngIf="showAddEventModal">
+    <div class="modal">
+      <h3>Add Custom Event</h3>
+
+      <label>Event Name:</label>
+      <input type="text" [(ngModel)]="newEventName" class="form-control" placeholder="Enter event name">
+
+      <label>Coefficient:</label>
+      <input type="number" [(ngModel)]="newEventValue" step="0.01" min="1.01" class="form-control" placeholder="Enter coefficient">
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="closeAddEventModal()">Cancel</button>
+        <button class="btn btn-primary" (click)="confirmAddEvent()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>

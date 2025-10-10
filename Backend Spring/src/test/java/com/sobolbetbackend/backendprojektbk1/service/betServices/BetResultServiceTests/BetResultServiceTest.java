@@ -1,7 +1,7 @@
-package com.sobolbetbackend.backendprojektbk1.service.betServices;
+package com.sobolbetbackend.backendprojektbk1.service.betServices.BetResultServiceTests;
 
-import com.sobolbetbackend.backendprojektbk1.dto.linemakerBetsStats.BetCalculationResultDTO;
-import com.sobolbetbackend.backendprojektbk1.dto.linemakerBetsStats.RefundResultDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Linemaker.linemakerBetsStats.BetCalculationResultDTO;
+import com.sobolbetbackend.backendprojektbk1.dto.Linemaker.linemakerBetsStats.RefundResultDTO;
 import com.sobolbetbackend.backendprojektbk1.entity.Player;
 import com.sobolbetbackend.backendprojektbk1.entity.events.bet.FullBet;
 import com.sobolbetbackend.backendprojektbk1.entity.events.bet.OrdinaryBet;
@@ -9,6 +9,7 @@ import com.sobolbetbackend.backendprojektbk1.entity.events.sideInfo.Game;
 import com.sobolbetbackend.backendprojektbk1.repository.mainEventsRepos.GameRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.placeBet.FullBetRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.placeBet.OrdinaryBetRepo;
+import com.sobolbetbackend.backendprojektbk1.service.betServices.BetResultService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
