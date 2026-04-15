@@ -86,6 +86,10 @@ public class Game {
     @Getter
     private String linemakersName;
 
+    @Setter
+    @Getter
+    private Boolean resultsProcessed = false;
+
     public enum Status {
         NONE, IN_PROGRESS, PENDING, DONE
     }

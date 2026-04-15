@@ -1,0 +1,2 @@
+ALTER TABLE game
+    ADD COLUMN results_processed BOOLEAN DEFAULT FALSE NOT NULL;

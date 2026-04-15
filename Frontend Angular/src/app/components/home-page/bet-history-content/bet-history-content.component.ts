@@ -6,8 +6,8 @@ interface FullBet {
   betAmount: number;
   finalCoefficient: number;
   countOfOrdinaryBets: number;
-  betStatus?: string;
-  finalBetPayout?: number;
+  betStatus?: boolean | null;
+  finalBetPayout?: number | null;
 }
 
 @Component({
@@ -168,6 +168,24 @@ export class BetHistoryContentComponent implements OnInit {
         }
       })
     }
+  }
+
+  getMatchScoreText(ordinaryBet: any): string {
+    if (ordinaryBet.scoreHome == null || ordinaryBet.scoreAway == null) {
+      return '';
+    }
+
+    let text = `${ordinaryBet.scoreHome}:${ordinaryBet.scoreAway}`;
+
+    if (ordinaryBet.extraTimeHomeScore != null && ordinaryBet.extraTimeAwayScore != null) {
+      text += ` (ET ${ordinaryBet.extraTimeHomeScore}:${ordinaryBet.extraTimeAwayScore})`;
+    }
+
+    if (ordinaryBet.penaltyHomeScore != null && ordinaryBet.penaltyAwayScore != null) {
+      text += ` (PEN ${ordinaryBet.penaltyHomeScore}:${ordinaryBet.penaltyAwayScore})`;
+    }
+
+    return text;
   }
 
 }

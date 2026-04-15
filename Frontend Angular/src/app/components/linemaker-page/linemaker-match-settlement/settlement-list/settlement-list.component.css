@@ -1,0 +1,94 @@
+.settlement-page {
+  max-width: 1250px;
+  margin: 30px auto;
+  color: white;
+}
+
+.settlement-page h1 {
+  color: #2487ff;
+  margin-bottom: 10px;
+}
+
+.filters-box {
+  background: #f3f3f3;
+  padding: 18px;
+  border-radius: 10px;
+  margin: 20px 0;
+  color: black;
+}
+
+.filters-box input,
+.filters-box select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.filters-box {
+  box-sizing: border-box;
+}
+
+.filters-box input,
+.filters-box select {
+  width: 100%;
+  box-sizing: border-box;
+}
+.filter-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.filter-item {
+  min-width: 220px;
+}
+
+.filter-item label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.filter-row button,
+.action-btn {
+  background: #0d87ff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.matches-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f3f3f3;
+  color: black;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.matches-table th,
+.matches-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.team-home {
+  color: #20a63e;
+  font-weight: 600;
+}
+
+.info-box,
+.error-box {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 8px;
+  background: #f3f3f3;
+  color: black;
+}
+
+.error-box {
+  color: #b00020;
+}

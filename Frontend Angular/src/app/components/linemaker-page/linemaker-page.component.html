@@ -2,7 +2,8 @@
   <app-linemaker-nav-bar (unpublishedMatchesClicked)="onIsUnpublishedMatchesClicked()"
                          (lineMatchesClicked)="onIsLineMatchesClicked()"
                          (liveMatchesClicked)="onIsLiveMatchesClicked()"
-                         (createMatchClicked)="onIsCreateMatchClicked()">
+                         (createMatchClicked)="onIsCreateMatchClicked()"
+                         (matchSettlementClicked)="onIsMatchSettlementClicked()">
   </app-linemaker-nav-bar>
 </header>
 
@@ -11,7 +12,7 @@
 </ng-container>
 
 <ng-container *ngIf="isLineMatchesClicked">
-  <app-linemaker-line-matches></app-linemaker-line-matches>
+  <app-linemaker-line-matches (manageMatchRequested)="onManageMatchClicked($event)"></app-linemaker-line-matches>
 </ng-container>
 
 <ng-container *ngIf="isLiveMatchesClicked">
@@ -27,4 +28,23 @@
   <app-linemaker-set-odds-match [matchId]="selectedMatchId"
                           (backToList)="goBackToUnpublishedMatches()">
   </app-linemaker-set-odds-match>
+</ng-container>
+
+<ng-container *ngIf="isManageMatchClicked && selectedMatchId">
+  <app-linemaker-manage-line-match [matchId]="selectedMatchId"
+                                (backToList)="goBackToLineMatches()">
+  </app-linemaker-manage-line-match>
+</ng-container>
+
+<ng-container *ngIf="isMatchSettlementClicked">
+  <app-settlement-list
+    (openSettlementMatchRequested)="onOpenSettlementMatchClicked($event)">
+  </app-settlement-list>
+</ng-container>
+
+<ng-container *ngIf="isSettlementMatchDetailsClicked && selectedMatchId">
+  <app-settlement-details
+    [matchId]="selectedMatchId"
+    (backToList)="goBackToSettlementMatches()">
+  </app-settlement-details>
 </ng-container>

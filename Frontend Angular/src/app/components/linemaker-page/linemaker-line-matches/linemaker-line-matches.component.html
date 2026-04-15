@@ -1,1 +1,116 @@
-<p>linemaker-line-matches works!</p>
+<div class="line-matches-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <i class="fas fa-list"></i>
+      Line Matches
+    </h1>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading matches...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="error-container">
+    <p class="error-message">{{ errorMessage }}</p>
+    <button class="btn btn-secondary" (click)="loadLineMatches()">
+      Try Again
+    </button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && !errorMessage && lineMatches.length === 0" class="empty-state">
+    <i class="fas fa-inbox fa-3x"></i>
+    <h3>No Line Matches</h3>
+    <p>No matches yet.</p>
+  </div>
+
+  <!-- Matches Table -->
+  <div *ngIf="!isLoading && lineMatches.length > 0" class="matches-table-container">
+    <div class="filter-section">
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search by team, league, or sport..."
+          [(ngModel)]="searchQuery"
+          (input)="applyFilters()"
+        />
+      </div>
+
+      <div class="filters">
+        <div class="filter-group">
+          <label for="statusFilter">Status</label>
+          <select id="statusFilter" class="filter-select" [(ngModel)]="statusFilter" (change)="applyFilters()">
+            <option value="">All</option>
+            <option value="NONE">None</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="PENDING">Pending</option>
+            <option value="DONE">Done</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="sportFilter">Sport</label>
+          <select id="sportFilter" class="filter-select" [(ngModel)]="sportFilter" (change)="applyFilters()">
+            <option value="">All</option>
+            <option *ngFor="let sport of availableSports" [value]="sport">{{ sport }}</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary btn-reset" (click)="resetFilters()">
+          <i class="fas fa-filter"></i>
+          Filter
+        </button>
+      </div>
+    </div>
+    <table class="matches-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Sport</th>
+        <th>Country</th>
+        <th>League</th>
+        <th>Home Team</th>
+        <th>Away Team</th>
+        <th>Date & Time</th>
+        <th>Actions</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let match of filteredMatches">
+        <td>{{ match.id }}</td>
+        <td>
+          <span class="sport-badge">{{ match.sport }}</span>
+        </td>
+        <td>
+          <span [ngClass]="{'text-muted': !match.country}">
+            {{ getCountryDisplay(match.country) }}
+          </span>
+        </td>
+        <td>{{ match.league }}</td>
+        <td class="team-home">{{ match.teamHome }}</td>
+        <td class="team-away">{{ match.teamAway }}</td>
+        <td>{{ formatDate(match.dateOfMatch) }}</td>
+        <td class="actions">
+          <button class="btn btn-sm btn-success" (click)="manageMatch(match)">
+            <i class="fas fa-check"></i>
+            Manage Match
+          </button>
+        </td>
+        <td class="status-cell"
+            (click)="toggleStatus(match)"
+            [title]="(match.status || 'NONE') + (match.linemakersName ? ' — ' + match.linemakersName : '')">
+          <div class="status-square" [ngClass]="getStatusClass(match.status)">
+            {{ match.linemakerInitials || '' }}
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

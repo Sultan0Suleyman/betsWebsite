@@ -20,7 +20,7 @@ public class UnpublishedMatchesController {
     }
 
     @GetMapping("/unpublished-matches")
-    public ResponseEntity<List<UnpublishedMatchDTO>> getUnpublishedMatches() {
+    public ResponseEntity<List<LinemakerMatchInfoDTO>> getUnpublishedMatches() {
         return ResponseEntity.ok(unpublishedMatchesService.getUnpublishedMatches());
     }
 

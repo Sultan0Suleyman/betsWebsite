@@ -37,10 +37,14 @@ export class LeaguesMatchesContentComponent implements OnChanges {
 
     // Выполнение GET-запроса
     this.http.get(apiUrl).subscribe({
-      next: (data) => {
-        // Обработка данных, полученных от бэкенда
+      next: (data: any) => {
         this.gamesData = data;
-        console.log(this.gamesData);
+        console.log('gamesData:', this.gamesData);
+
+        this.gamesData.forEach((game: any) => {
+          console.log('GAME', game.id, game.teamHome, game.teamAway);
+          console.log('BETS', game.bets);
+        });
       },
       error: (error) => {
         // Обработка ошибок
@@ -55,8 +59,14 @@ export class LeaguesMatchesContentComponent implements OnChanges {
   }
 
   getBetValue(game: any, type: string): number | null {
-    if (!game.bets) return null;
-    const bet = game.bets.find((b: any) => b.type === type);
+    if (!Array.isArray(game.bets)) return null;
+
+    const normalizedType = type.trim().toLowerCase();
+
+    const bet = game.bets.find((b: any) =>
+      String(b.type).trim().toLowerCase() === normalizedType
+    );
+
     return bet ? bet.value : null;
   }
 }

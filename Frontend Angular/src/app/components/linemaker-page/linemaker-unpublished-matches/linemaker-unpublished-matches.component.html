@@ -82,7 +82,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let match of filteredMatches; let i = index">
+      <tr *ngFor="let match of filteredMatches">
         <td>{{ match.id }}</td>
         <td>
           <span class="sport-badge">{{ match.sport }}</span>
@@ -97,17 +97,17 @@
         <td class="team-away">{{ match.teamAway }}</td>
         <td>{{ formatDate(match.dateOfMatch) }}</td>
         <td class="actions">
-          <button class="btn btn-sm btn-success" (click)="setOdds(i)">
+          <button class="btn btn-sm btn-success" (click)="setOdds(match)">
             <i class="fas fa-check"></i>
             Set Odds
           </button>
-          <button class="btn btn-sm btn-danger" (click)="deleteMatch(i)">
+          <button class="btn btn-sm btn-danger" (click)="deleteMatch(match)">
             <i class="fas fa-trash"></i>
             Delete
           </button>
         </td>
         <td class="status-cell"
-            (click)="toggleStatus(i)"
+            (click)="toggleStatus(match)"
             [title]="(match.status || 'NONE') + (match.linemakersName ? ' — ' + match.linemakersName : '')">
           <div class="status-square" [ngClass]="getStatusClass(match.status)">
             {{ match.linemakerInitials || '' }}

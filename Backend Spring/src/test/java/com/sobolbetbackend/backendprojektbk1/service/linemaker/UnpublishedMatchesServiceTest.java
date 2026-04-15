@@ -109,12 +109,12 @@ class UnpublishedMatchesServiceTest {
         when(gameRepo.findByIsGamePosted(false)).thenReturn(Collections.singletonList(testGame));
 
         // Act
-        List<UnpublishedMatchDTO> result = unpublishedMatchesService.getUnpublishedMatches();
+        List<LinemakerMatchInfoDTO> result = unpublishedMatchesService.getUnpublishedMatches();
 
         // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
-        UnpublishedMatchDTO dto = result.getFirst();
+        LinemakerMatchInfoDTO dto = result.getFirst();
         assertEquals("1", dto.getId());
         assertEquals("Soccer", dto.getSport());
         assertEquals("England", dto.getCountry());
@@ -140,7 +140,7 @@ class UnpublishedMatchesServiceTest {
         when(gameRepo.findByIsGamePosted(false)).thenReturn(Collections.singletonList(testGame));
 
         // Act
-        List<UnpublishedMatchDTO> result = unpublishedMatchesService.getUnpublishedMatches();
+        List<LinemakerMatchInfoDTO> result = unpublishedMatchesService.getUnpublishedMatches();
 
         // Assert
         assertNotNull(result);
@@ -161,7 +161,7 @@ class UnpublishedMatchesServiceTest {
         when(gameRepo.findByIsGamePosted(false)).thenReturn(Collections.emptyList());
 
         // Act
-        List<UnpublishedMatchDTO> result = unpublishedMatchesService.getUnpublishedMatches();
+        List<LinemakerMatchInfoDTO> result = unpublishedMatchesService.getUnpublishedMatches();
 
         // Assert
         assertNotNull(result);

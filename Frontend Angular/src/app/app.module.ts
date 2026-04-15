@@ -50,6 +50,9 @@ import { LinemakerLiveMatchesComponent } from './components/linemaker-page/linem
 import { LinemakerCreateMatchComponent } from './components/linemaker-page/linemaker-create-match/linemaker-create-match.component';
 import { LinemakerUnpublishedMatchesComponent } from './components/linemaker-page/linemaker-unpublished-matches/linemaker-unpublished-matches.component';
 import { LinemakerSetOddsMatchComponent } from './components/linemaker-page/linemaker-set-odds-match/linemaker-set-odds-match.component';
+import { LinemakerManageLineMatchComponent } from './components/linemaker-page/linemaker-manage-line-match/linemaker-manage-line-match.component';
+import { SettlementListComponent } from './components/linemaker-page/linemaker-match-settlement/settlement-list/settlement-list.component';
+import { SettlementDetailsComponent } from './components/linemaker-page/linemaker-match-settlement/settlement-details/settlement-details.component';
 
 const routes: Routes=[
   { path: '', redirectTo: '/player/main-page', pathMatch: 'full' },
@@ -101,6 +104,9 @@ const routes: Routes=[
     LinemakerCreateMatchComponent,
     LinemakerUnpublishedMatchesComponent,
     LinemakerSetOddsMatchComponent,
+    LinemakerManageLineMatchComponent,
+    SettlementListComponent,
+    SettlementDetailsComponent,
   ],
   imports: [
     HttpClientModule,

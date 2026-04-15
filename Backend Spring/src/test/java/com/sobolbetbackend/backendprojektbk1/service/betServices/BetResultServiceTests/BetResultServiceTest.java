@@ -9,7 +9,7 @@ import com.sobolbetbackend.backendprojektbk1.entity.events.sideInfo.Game;
 import com.sobolbetbackend.backendprojektbk1.repository.mainEventsRepos.GameRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.placeBet.FullBetRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.placeBet.OrdinaryBetRepo;
-import com.sobolbetbackend.backendprojektbk1.service.betServices.BetResultService;
+import com.sobolbetbackend.backendprojektbk1.service.matchSettlementServices.BetResultService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

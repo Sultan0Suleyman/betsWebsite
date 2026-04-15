@@ -61,17 +61,17 @@ public class UnpublishedMatchesService {
      * Country information is handled safely - if a game has no associated country,
      * the country field in the DTO will be null.
      *
-     * @return a list of {@link UnpublishedMatchDTO} objects representing all unpublished matches.
+     * @return a list of {@link LinemakerMatchInfoDTO} objects representing all unpublished matches.
      *         Returns an empty list if no unpublished matches exist.
      */
-    public List<UnpublishedMatchDTO> getUnpublishedMatches(){
+    public List<LinemakerMatchInfoDTO> getUnpublishedMatches(){
         List<Game> unpublishedMatches = gameRepo.findByIsGamePosted(false);
-        List<UnpublishedMatchDTO> unpublishedMatchDTOs = new ArrayList<>();
+        List<LinemakerMatchInfoDTO> linemakerMatchInfoDTOS = new ArrayList<>();
         for (Game game : unpublishedMatches) {
             // Check for null before calling getName()
             String countryName = game.getCountry() != null ? game.getCountry().getName() : null;
 
-            unpublishedMatchDTOs.add(new UnpublishedMatchDTO(
+            linemakerMatchInfoDTOS.add(new LinemakerMatchInfoDTO(
                     game.getId().toString(),
                     game.getSport().getName_en(),
                     countryName,  // Can be null
@@ -83,7 +83,7 @@ public class UnpublishedMatchesService {
                     game.getLinemakersName()
             ));
         }
-        return unpublishedMatchDTOs;
+        return linemakerMatchInfoDTOS;
     }
 
     /**

@@ -76,13 +76,26 @@ public class GetListOfBetsService {
                 .toList();
     }
 
-    @Cacheable(cacheNames = {"gamesCache"}, key = "#sport + '|' + #country + '|' + #league")
     public List<GameBetsResponseDTO> getGames(String sport, String country, String league) {
         Sport sport1 = sportRepo.findById(sport).orElseThrow();
         Country country1 = countryRepo.findById(country).orElse(null);
         League league1 = leagueRepo.findById(league).orElseThrow();
 
-        List<Game> games = (List<Game>)gameRepo.findAllByCountryAndSportAndLeague(country1, sport1, league1);
+        List<Game> games = (List<Game>) gameRepo.findAllByCountryAndSportAndLeague(country1, sport1, league1);
+
+        System.out.println("REQUEST => sport=" + sport + ", country=" + country + ", league=" + league);
+        System.out.println("FOUND GAMES COUNT = " + games.size());
+
+        for (Game game : games) {
+            System.out.println("GAME ID = " + game.getId());
+            System.out.println("posted = " + game.getGamePosted());
+            System.out.println("live = " + game.getGameInLive());
+            System.out.println("ended = " + game.getGameEnded());
+            System.out.println("bettingEvent = " + (game.getBettingEvent() != null));
+            System.out.println("country = " + (game.getCountry() != null ? game.getCountry().getName() : null));
+            System.out.println("league = " + (game.getLeague() != null ? game.getLeague().getName() : null));
+            System.out.println("-----");
+        }
 
         List<Game> filteredGames = games.stream()
                 .filter(game -> game.getGamePosted() && !game.getGameInLive() && !game.getGameEnded())
@@ -92,11 +105,15 @@ public class GetListOfBetsService {
 
         for (Game game : filteredGames) {
             BettingEvent event = game.getBettingEvent();
-            if (event == null) continue;
+            if (event == null) {
+                System.out.println("SKIPPED GAME " + game.getId() + " because bettingEvent is null");
+                continue;
+            }
 
             List<BettingOdd> odds = bettingOddRepo.findAllByBettingEvent(event);
-            List<BetDTO> bets = new ArrayList<>();
+            System.out.println("GAME " + game.getId() + " odds count = " + odds.size());
 
+            List<BetDTO> bets = new ArrayList<>();
             for (BettingOdd odd : odds) {
                 if (odd.getValue() != null) {
                     bets.add(new BetDTO(odd.getType(), odd.getValue()));
@@ -111,6 +128,7 @@ public class GetListOfBetsService {
                     bets
             ));
         }
+
         return finalList;
     }
 

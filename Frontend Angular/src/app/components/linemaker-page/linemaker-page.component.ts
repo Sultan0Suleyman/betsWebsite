@@ -11,6 +11,10 @@ export class LinemakerPageComponent {
   isLiveMatchesClicked = false;
   isCreateMatchClicked = false;
   isSetOddsClicked = false;
+  isManageMatchClicked = false;
+
+  isMatchSettlementClicked = false;
+  isSettlementMatchDetailsClicked = false;
 
   // Данные для передачи в компонент настройки коэффициентов
   selectedMatchId: number | null = null;
@@ -42,6 +46,23 @@ export class LinemakerPageComponent {
     this.selectedMatchId = matchId;
   }
 
+  onManageMatchClicked(matchId: number){
+    this.resetAllStates();
+    this.isManageMatchClicked = true;
+    this.selectedMatchId = matchId;
+  }
+
+  onIsMatchSettlementClicked() {
+    this.resetAllStates();
+    this.isMatchSettlementClicked = true;
+  }
+
+  onOpenSettlementMatchClicked(matchId: number) {
+    this.resetAllStates();
+    this.isSettlementMatchDetailsClicked = true;
+    this.selectedMatchId = matchId;
+  }
+
   // Вспомогательный метод для сброса всех состояний
   private resetAllStates(){
     this.isUnpublishedMatchesClicked = false;
@@ -49,11 +70,22 @@ export class LinemakerPageComponent {
     this.isLiveMatchesClicked = false;
     this.isCreateMatchClicked = false;
     this.isSetOddsClicked = false;
+    this.isManageMatchClicked = false;
     this.selectedMatchId = null;
+    this.isMatchSettlementClicked = false;
+    this.isSettlementMatchDetailsClicked = false;
   }
 
   // Метод для возврата к списку неопубликованных матчей
   goBackToUnpublishedMatches(){
     this.onIsUnpublishedMatchesClicked();
+  }
+
+  goBackToLineMatches(){
+    this.onIsLineMatchesClicked()
+  }
+
+  goBackToSettlementMatches() {
+    this.onIsMatchSettlementClicked();
   }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UnpublishedMatchDTO {
+public class LinemakerMatchInfoDTO {
     private String id;
     private String sport;
     private String country;

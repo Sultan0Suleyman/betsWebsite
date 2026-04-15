@@ -11,26 +11,12 @@ interface MatchDetails {
   dateOfMatch: string;
   odds: Record<string, number | null>;
 }
-
-interface OddsData {
-  win1: number | null;
-  draw: number | null;
-  win2: number | null;
-  x1: number | null;
-  w12: number | null;
-  x2: number | null;
-  w1InMatch: number | null;
-  w2InMatch: number | null;
-  firstTeamScoresFirst: number | null;
-  secondTeamScoresFirst: number | null;
-}
 @Component({
-  selector: 'app-linemaker-set-odds-match',
-  templateUrl: './linemaker-set-odds-match.component.html',
-  styleUrls: ['./linemaker-set-odds-match.component.css']
+  selector: 'app-linemaker-manage-line-match',
+  templateUrl: './linemaker-manage-line-match.component.html',
+  styleUrls: ['./linemaker-manage-line-match.component.css']
 })
-
-export class LinemakerSetOddsMatchComponent implements OnInit {
+export class LinemakerManageLineMatchComponent implements OnInit {
   @Input() matchId!: number;
   @Output() backToList = new EventEmitter<void>();
 
@@ -40,7 +26,7 @@ export class LinemakerSetOddsMatchComponent implements OnInit {
   isLoading = false;
   isSaving = false;
   errorMessage = '';
-  isPublished = false; // состояние публикации
+  isPublished = true; // состояние публикации
 
   showAddEventModal = false;
   newEventName = '';
@@ -146,7 +132,9 @@ export class LinemakerSetOddsMatchComponent implements OnInit {
     const url = this.isPublished
       ? `http://localhost:8080/linemaker/unpublish-match/${this.matchId}`
       : `http://localhost:8080/linemaker/publish-match/${this.matchId}`;
+
     if(!this.isPublished) this.saveOdds()
+
     this.http.post(url, {}).subscribe({
       next: () => {
         this.isSaving = false;
@@ -169,6 +157,7 @@ export class LinemakerSetOddsMatchComponent implements OnInit {
   isDefaultKey(key: string): boolean {
     return this.DEFAULT_ODDS_KEYS.includes(key);
   }
+
   trackByKey(index: number, item: any): string {
     return item.key;
   }

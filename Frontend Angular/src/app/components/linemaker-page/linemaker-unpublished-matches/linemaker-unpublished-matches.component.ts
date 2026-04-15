@@ -94,27 +94,35 @@ export class LinemakerUnpublishedMatchesComponent implements OnInit {
   }
 
   // Новый метод для открытия настройки коэффициентов
-  setOdds(index: number): void {
-    const match = this.unpublishedMatches[index];
+  setOdds(match: UnpublishedMatch): void {
     if (match.id) {
-      // Отправляем событие родительскому компоненту
       this.setOddsRequested.emit(match.id);
     } else {
       alert('Match ID is missing. Cannot set odds.');
     }
   }
 
-  deleteMatch(index: number): void {
+  deleteMatch(match: UnpublishedMatch): void {
     if (!confirm('Are you sure you want to delete this match?')) return;
-    const match = this.unpublishedMatches[index];
+
+    if (!match.id) {
+      alert('Match ID is missing');
+      return;
+    }
+
     this.http.delete(`http://localhost:8080/linemaker/delete-match/${match.id}`)
       .subscribe({
         next: () => {
-          this.unpublishedMatches.splice(index, 1);
+          // удаляем из оригинального массива по id
+          this.unpublishedMatches = this.unpublishedMatches.filter(m => m.id !== match.id);
+
+          // пересчитываем фильтрованный массив
+          this.applyFilters();
+
           alert('Match deleted successfully');
         },
-        error: (error) => {
-          console.error('Error deleting match:', error);
+        error: (err) => {
+          console.error('Error deleting match:', err);
           alert('Failed to delete match');
         }
       });
@@ -148,42 +156,48 @@ export class LinemakerUnpublishedMatchesComponent implements OnInit {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
-  toggleStatus(index: number): void {
-    console.log(this.authService.getCachedNameSurname);
-    const match = this.unpublishedMatches[index];
-    const statuses: Array<'NONE' | 'IN_PROGRESS' | 'PENDING' | 'DONE'> = ['NONE', 'IN_PROGRESS', 'PENDING', 'DONE'];
+  toggleStatus(match: UnpublishedMatch): void {
+    const statuses: Array<'NONE' | 'IN_PROGRESS' | 'PENDING' | 'DONE'> =
+      ['NONE', 'IN_PROGRESS', 'PENDING', 'DONE'];
+
     const currentIndex = statuses.indexOf(match.status ?? 'NONE');
     const nextStatus = statuses[(currentIndex + 1) % statuses.length];
 
-    // update UI optimistically
+    // UI update
     if (nextStatus === 'NONE') {
       match.status = 'NONE';
       match.linemakersName = undefined;
       match.linemakerInitials = undefined;
     } else {
-      // получаем имя и фамилию из кеша AuthService
       const cachedUser = this.authService.getCachedNameSurname();
-      if (cachedUser) {
-        const initials = this.convertNameToInitials(`${cachedUser.firstName} ${cachedUser.lastName}`);
+
+      const name = cachedUser
+        ? `${cachedUser.firstName} ${cachedUser.lastName}`
+        : null;
+
+      if (name) {
         match.status = nextStatus;
-        match.linemakersName = `${cachedUser.firstName} ${cachedUser.lastName}`;
-        match.linemakerInitials = initials;
+        match.linemakersName = name;
+        match.linemakerInitials = this.convertNameToInitials(name);
       } else {
-        // Если вдруг не нашли в sessionStorage, делаем запрос на бэк
-        this.authService.getCurrentUsersNameSurname(this.authService.getCurrentUser().getValue().username)
-          .subscribe(user => {
-            const initials = this.convertNameToInitials(`${user.firstName} ${user.lastName}`);
-            match.status = nextStatus;
-            match.linemakersName = `${user.firstName} ${user.lastName}`;
-            match.linemakerInitials = initials;
-          }, error => {
-            console.error('Failed to load user info', error);
-            alert('Failed to get current user info');
-          });
+        this.authService
+          .getCurrentUsersNameSurname(this.authService.getCurrentUser().getValue().username)
+          .subscribe(
+            user => {
+              const fullName = `${user.firstName} ${user.lastName}`;
+              match.status = nextStatus;
+              match.linemakersName = fullName;
+              match.linemakerInitials = this.convertNameToInitials(fullName);
+            },
+            err => {
+              console.error('Failed to load user info', err);
+              alert('Failed to get current user info');
+            }
+          );
       }
     }
 
-    // send update to backend if we have match id
+    // backend update
     if (match.id != null) {
       const body = {
         matchId: match.id,
@@ -193,21 +207,13 @@ export class LinemakerUnpublishedMatchesComponent implements OnInit {
 
       this.http.patch('http://localhost:8080/linemaker/match-status', body)
         .subscribe({
-          next: () => {
-            // ok
-          },
-          error: (err) => {
+          error: err => {
             console.error('Failed to update match status:', err);
-            // optionally revert UI on error
-            match.status = statuses[currentIndex];
-            if (match.status === 'NONE') {
-              match.linemakersName = undefined;
-              match.linemakerInitials = undefined;
-            }
           }
         });
     }
   }
+
 
   getStatusClass(status?: string): string {
     switch (status) {

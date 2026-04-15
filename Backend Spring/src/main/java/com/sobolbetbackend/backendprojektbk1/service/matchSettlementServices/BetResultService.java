@@ -1,4 +1,4 @@
-package com.sobolbetbackend.backendprojektbk1.service.betServices;
+package com.sobolbetbackend.backendprojektbk1.service.matchSettlementServices;
 
 import com.sobolbetbackend.backendprojektbk1.dto.Linemaker.linemakerBetsStats.BetCalculationResultDTO;
 import com.sobolbetbackend.backendprojektbk1.dto.Linemaker.linemakerBetsStats.RefundResultDTO;
@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -65,12 +68,16 @@ public class BetResultService {
      * @throws IllegalStateException if the game is not marked as finished
      */
     @Transactional
-    public BetCalculationResultDTO processGameResult(Long gameId){
+    public BetCalculationResultDTO processGameResult(Long gameId) {
         BetCalculationResultDTO result = new BetCalculationResultDTO();
 
         // 1. Get game and verify it has finished
         Game game = gameRepo.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Game not found with id: " + gameId));
+
+        if (Boolean.TRUE.equals(game.getResultsProcessed())) {
+            throw new IllegalStateException("Game already processed");
+        }
 
         if (!game.getGameEnded()) {
             throw new IllegalStateException("Cannot process bets for unfinished game");
@@ -111,27 +118,29 @@ public class BetResultService {
             try {
                 totalBetAmounts += fullBet.getBetAmount();
 
+                boolean hasLosingBet = fullBet.getBets().stream()
+                        .anyMatch(bet -> bet.getWinningBet() == Boolean.FALSE);
+
+                if (hasLosingBet) {
+                    fullBet.setFinalBetPayout(0.0);
+                    fullBet.setBetStatus(false);
+                    continue;
+                }
+
                 if (isFullBetWon(fullBet)) {
-                    // Won - process payout
                     double payout = fullBet.getBetAmount() * fullBet.getFinalCoefficient();
                     fullBet.setFinalBetPayout(payout);
                     fullBet.setBetStatus(true);
                     fullBet.getPlayer().updateBalance(payout);
                     totalPayouts += payout;
+                    continue;
+                }
 
-                } else {
-                    // Check if express is ready for processing
-                    boolean allGamesFinished = fullBet.getBets().stream()
-                            .allMatch(bet -> bet.getGame().getGameEnded());
+                boolean allGamesFinished = fullBet.getBets().stream()
+                        .allMatch(bet -> bet.getGame().getGameEnded());
 
-                    if (allGamesFinished) {
-                        // Express lost (all games finished but not won)
-                        fullBet.setFinalBetPayout(0.0);
-                        fullBet.setBetStatus(false);
-                    } else {
-                        // Express not ready - don't process y
-                        continue; // Skip processing
-                    }
+                if (!allGamesFinished) {
+                    continue;
                 }
 
             } catch (Exception e) {
@@ -144,8 +153,8 @@ public class BetResultService {
         fullBetRepo.saveAll(fullBetsToProcess);
 
         // 7. Fill in statistics
-        result.setTotalPayouts(totalPayouts);
-        result.setBookmakerProfit(totalBetAmounts - totalPayouts);
+        result.setTotalPayouts(Math.round(totalPayouts * 100.0) / 100.0);
+        result.setBookmakerProfit(Math.round((totalBetAmounts - totalPayouts) * 100.0) / 100.0);
 
         return result;
     }
@@ -165,7 +174,8 @@ public class BetResultService {
      * @throws IllegalArgumentException if the bet outcome type is not supported
      */
     private boolean calculateSingleBetResult(OrdinaryBet bet, Game game) {
-        String outcome = bet.getOutcomeOfTheGame();
+        String rawOutcome = bet.getOutcomeOfTheGame();
+
         Integer homeScore = game.getScoreTeamHome();
         Integer awayScore = game.getScoreTeamAway();
         Integer extraTimeHome = game.getExtraTimeHomeScore();
@@ -173,37 +183,92 @@ public class BetResultService {
         Integer penaltyHome = game.getPenaltyHomeScore();
         Integer penaltyAway = game.getPenaltyAwayScore();
 
+        if (rawOutcome == null || rawOutcome.isBlank()) {
+            throw new IllegalArgumentException("Bet outcome is null or blank");
+        }
+
         if (homeScore == null || awayScore == null) {
             throw new IllegalStateException("Game scores not set");
         }
 
-        // Total score including extra time and penalties
-        int totalHomeScore = homeScore +
-                (extraTimeHome != null ? extraTimeHome : 0) +
-                (penaltyHome != null ? penaltyHome : 0);
-        int totalAwayScore = awayScore +
-                (extraTimeAway != null ? extraTimeAway : 0) +
-                (penaltyAway != null ? penaltyAway : 0);
+        // main time total
+        int regularTotal = homeScore + awayScore;
+
+        // total score including extra time and penalties
+        int totalHomeScore = homeScore
+                + (extraTimeHome != null ? extraTimeHome : 0)
+                + (penaltyHome != null ? penaltyHome : 0);
+
+        int totalAwayScore = awayScore
+                + (extraTimeAway != null ? extraTimeAway : 0)
+                + (penaltyAway != null ? penaltyAway : 0);
+
+        String outcome = normalizeOutcome(rawOutcome);
 
         return switch (outcome) {
-            // Regular time outcomes (main time only)
-            case "Win1" -> homeScore > awayScore;
-            case "Draw" -> homeScore.equals(awayScore);
-            case "Win2" -> awayScore > homeScore;
+            // Regular time outcomes
+            case "win1" -> homeScore > awayScore;
+            case "draw" -> homeScore.equals(awayScore);
+            case "win2" -> awayScore > homeScore;
 
             // Double chance (regular time)
-            case "1X" -> // Home team win or draw
-                    homeScore >= awayScore;
-            case "12" -> // Any team wins (no draw)
-                    !homeScore.equals(awayScore);
-            case "2X" -> // Away team win or draw
-                    awayScore >= homeScore;
+            case "x1" -> homeScore >= awayScore;
+            case "w12", "12" -> !homeScore.equals(awayScore);
+            case "x2" -> awayScore >= homeScore;
 
             // Full match outcomes (including extra time and penalties)
-            case "Win of 1 team in match" -> totalHomeScore > totalAwayScore;
-            case "Win of 2 team in match" -> totalAwayScore > totalHomeScore;
-            default -> throw new IllegalArgumentException("Unknown bet outcome: " + outcome);
+            case "w1inmatch", "win of 1 team in match" -> totalHomeScore > totalAwayScore;
+            case "w2inmatch", "win of 2 team in match" -> totalAwayScore > totalHomeScore;
+
+            // First team scores first / second team scores first
+            // Нельзя корректно рассчитать без отдельного поля в Game
+            case "firstteamscoresfirst", "secondteamscoresfirst" ->
+                    throw new IllegalArgumentException(
+                            "Outcome '" + rawOutcome + "' requires first goal data, which is not stored in Game"
+                    );
+
+            default -> {
+                if (isTotalOverOutcome(outcome)) {
+                    double line = extractTotalLine(outcome);
+                    yield regularTotal > line;
+                }
+
+                if (isTotalLessOutcome(outcome)) {
+                    double line = extractTotalLine(outcome);
+                    yield regularTotal < line;
+                }
+
+                throw new IllegalArgumentException("Unknown bet outcome: " + rawOutcome);
+            }
         };
+    }
+
+    private String normalizeOutcome(String outcome) {
+        return outcome
+                .trim()
+                .toLowerCase(Locale.ROOT)
+                .replace("\"", "")
+                .replace(",", ".")
+                .replaceAll("\\s+", " ");
+    }
+
+    private boolean isTotalOverOutcome(String outcome) {
+        return outcome.startsWith("total over ");
+    }
+
+    private boolean isTotalLessOutcome(String outcome) {
+        return outcome.startsWith("total less ");
+    }
+
+    private double extractTotalLine(String outcome) {
+        Pattern pattern = Pattern.compile("total\\s+(over|less)\\s+([0-9]+(?:\\.[0-9]+)?)");
+        Matcher matcher = pattern.matcher(outcome);
+
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Cannot parse total line from outcome: " + outcome);
+        }
+
+        return Double.parseDouble(matcher.group(2));
     }
 
     /**

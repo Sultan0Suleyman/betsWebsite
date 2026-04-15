@@ -1,0 +1,68 @@
+<div class="settlement-page">
+  <h1>Match Settlement</h1>
+  <hr>
+
+  <div class="filters-box">
+    <input
+      type="text"
+      placeholder="Search by team, league, or sport..."
+      [(ngModel)]="searchTerm"
+    />
+
+    <div class="filter-row">
+      <div class="filter-item">
+        <label>Sport</label>
+        <select [(ngModel)]="selectedSport">
+          <option *ngFor="let sport of availableSports" [value]="sport">
+            {{ sport }}
+          </option>
+        </select>
+      </div>
+
+      <button (click)="applyFilters()">Filter</button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="info-box">Loading matches...</div>
+  <div *ngIf="errorMessage" class="error-box">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && filteredMatches.length" class="matches-table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Sport</th>
+      <th>Country</th>
+      <th>League</th>
+      <th>Home Team</th>
+      <th>Away Team</th>
+      <th>Date & Time</th>
+      <th>Score</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let match of filteredMatches">
+      <td>{{ match.id }}</td>
+      <td>{{ match.sport }}</td>
+      <td>{{ match.country }}</td>
+      <td>{{ match.league }}</td>
+      <td class="team-home">{{ match.homeTeam }}</td>
+      <td>{{ match.awayTeam }}</td>
+      <td>{{ match.dateOfMatch | date:'dd.MM.yyyy HH:mm' }}</td>
+      <td>{{ getScoreText(match) }}</td>
+      <td>{{ getStatusText(match) }}</td>
+      <td>
+        <button class="action-btn" (click)="openMatch(match.id)">
+          Open
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && !filteredMatches.length" class="info-box">
+    No matches found.
+  </div>
+</div>

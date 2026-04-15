@@ -11,6 +11,7 @@ export class LinemakerNavBarComponent {
   @Output() lineMatchesClicked: EventEmitter<void> = new EventEmitter<void>()
   @Output() liveMatchesClicked: EventEmitter<void> = new EventEmitter<void>()
   @Output() createMatchClicked: EventEmitter<void> = new EventEmitter<void>()
+  @Output() matchSettlementClicked: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
     private authService:AuthService
@@ -31,6 +32,10 @@ export class LinemakerNavBarComponent {
 
   onCreateMatchClicked(): void{
     this.createMatchClicked.emit()
+  }
+
+  onMatchSettlementClick() {
+    this.matchSettlementClicked.emit();
   }
 
   onLogout(): void{

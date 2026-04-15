@@ -1,0 +1,116 @@
+<div class="details-page">
+  <button class="back-btn" (click)="goBack()">Back</button>
+
+  <div *ngIf="isLoading" class="info-box">Loading match...</div>
+  <div *ngIf="errorMessage" class="error-box">{{ errorMessage }}</div>
+
+  <div *ngIf="match && !isLoading" class="details-card">
+    <h2>{{ match.homeTeam }} vs {{ match.awayTeam }}</h2>
+
+    <div class="match-info">
+      <p><strong>Sport:</strong> {{ match.sport }}</p>
+      <p><strong>Country:</strong> {{ match.country }}</p>
+      <p><strong>League:</strong> {{ match.league }}</p>
+      <p><strong>Date:</strong> {{ match.dateOfMatch | date:'dd.MM.yyyy HH:mm' }}</p>
+      <p><strong>Status:</strong> {{ getStatusText() }}</p>
+    </div>
+
+    <div *ngIf="successMessage" class="success-box">
+      {{ successMessage }}
+    </div>
+
+    <div *ngIf="settlementResult" class="success-box">
+      <p><strong>Processed bets:</strong> {{ settlementResult.totalBetsProcessed }}</p>
+      <p><strong>Winning bets:</strong> {{ settlementResult.winningBets }}</p>
+      <p><strong>Losing bets:</strong> {{ settlementResult.losingBets }}</p>
+      <p><strong>Total payouts:</strong> {{ settlementResult.totalPayouts | number:'1.2-2' }}€</p>
+      <p><strong>Bookmaker profit:</strong> {{ settlementResult.bookmakerProfit | number:'1.2-2' }}€</p>
+
+      <div *ngIf="settlementResult.errors?.length">
+        <p><strong>Errors:</strong></p>
+        <ul>
+          <li *ngFor="let err of settlementResult.errors">{{ err }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div *ngIf="refundResult" class="success-box">
+      <p><strong>Total bets refunded:</strong> {{ refundResult.totalBetsRefunded }}</p>
+      <p><strong>Refunded bets:</strong> {{ refundResult.refundedBets }}</p>
+      <p><strong>Total refund amount:</strong> {{ refundResult.totalRefundAmount | number:'1.2-2' }}€</p>
+
+      <div *ngIf="refundResult.errors?.length">
+        <p><strong>Errors:</strong></p>
+        <ul>
+          <li *ngFor="let err of refundResult.errors">{{ err }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <form [formGroup]="settlementForm">
+      <div class="form-grid">
+        <div class="form-item">
+          <label>Home Score</label>
+          <input type="number" formControlName="homeScore">
+          <div *ngIf="isFieldInvalid('homeScore')" class="field-error">
+            Required, minimum 0
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Away Score</label>
+          <input type="number" formControlName="awayScore">
+          <div *ngIf="isFieldInvalid('awayScore')" class="field-error">
+            Required, minimum 0
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Extra Time Home</label>
+          <input type="number" formControlName="extraTimeHomeScore">
+        </div>
+
+        <div class="form-item">
+          <label>Extra Time Away</label>
+          <input type="number" formControlName="extraTimeAwayScore">
+        </div>
+
+        <div class="form-item">
+          <label>Penalty Home</label>
+          <input type="number" formControlName="penaltyHomeScore">
+        </div>
+
+        <div class="form-item">
+          <label>Penalty Away</label>
+          <input type="number" formControlName="penaltyAwayScore">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button
+          type="button"
+          class="save-btn"
+          (click)="saveScore()"
+          [disabled]="isSubmitting || match.resultsProcessed || isActionCompleted">
+          Save score
+        </button>
+
+        <button
+          type="button"
+          class="finish-btn"
+          (click)="finishAndSettle()"
+          [disabled]="isSubmitting || match.resultsProcessed || isActionCompleted">
+          Finish and settle
+        </button>
+
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="cancelMatch()"
+          [disabled]="isSubmitting || match.resultsProcessed || isActionCompleted">
+          Cancel match
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
