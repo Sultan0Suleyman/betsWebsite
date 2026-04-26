@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class CountryAndSportUploadController {
-    private final String apiCountriesUrl = "https://thesportsdb.com/api/v1/json/3/all_countries.php";
-    private final String apiSportsUrl = "https://thesportsdb.com/api/v1/json/3/search_all_leagues.php?c=France";
+    private final String apiCountriesUrl = "https://thesportsdb.com/api/v1/json/123/all_countries.php";
+    private final String apiSportsUrl = "https://www.thesportsdb.com/api/v1/json/123/all_sports.php";
 
     private final DeveloperKeyService developerKeyService;
     private final CountryRepo countryRepo;

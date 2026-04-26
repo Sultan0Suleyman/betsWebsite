@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/api")
 public class LeagueUploadController {
-    private final String basicLeaguesApiUrl = "https://thesportsdb.com/api/v1/json/3/search_all_leagues.php";
+    private final String basicLeaguesApiUrl = "https://www.thesportsdb.com/api/v1/json/123/search_all_leagues.php";
     private final String leagueNodeInJsonFile = "countries";
     private final String elementOfTheLeagueInJsonFile = "strLeague";
     private final String elementOfTheSportInJsonFile = "strSport";

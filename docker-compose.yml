@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: sobolbet-mysql
+    environment:
+      MYSQL_DATABASE: projectbk
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./Backend Spring
+    container_name: sobolbet-backend
+    depends_on:
+      - db
+    environment:
+      DB_URL: jdbc:mysql://db:3306/projectbk
+      DB_USERNAME: appuser
+      DB_PASSWORD: apppass
+      APP_DEVELOPER_KEY: my-dev-key-123
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data:

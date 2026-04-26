@@ -63,11 +63,19 @@ public class TeamsUpdateService {
                             String strTeam = teamNode.get(teamEl).asText();
                             String strLeague = teamNode.get(leagueEl).asText();
 
-                            League leagueEntity = leagueRepo.findById(strLeague)
-                                    .orElseThrow(() -> new NoSuchElementException(
-                                            "League not found with id: " + strLeague));
+                            if (strLeague == null || strLeague.isBlank() || strLeague.startsWith("No League")) {
+                                log.warn("Skipping team {} due to invalid league: {}", strTeam, strLeague);
+                                continue;
+                            }
 
-                            listOfTeams.add(new Team(strTeam,leagueEntity,sportEntity,countryEntity));
+                            League leagueEntity = leagueRepo.findById(strLeague).orElse(null);
+
+                            if (leagueEntity == null) {
+                                log.warn("Skipping team {}. League not found in DB: {}", strTeam, strLeague);
+                                continue;
+                            }
+
+                            listOfTeams.add(new Team(strTeam, leagueEntity, sportEntity, countryEntity));
                         } else{
                             throw new ApiProblemException("Api reference problems. Problems with elements of Node");
                         }

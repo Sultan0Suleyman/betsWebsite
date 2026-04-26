@@ -178,7 +178,7 @@ class UnpublishedMatchesServiceTest {
     @Test
     void getLinemakersNameSurname_ShouldReturnUserDetails_WhenUserExists() {
         // Arrange
-        when(userRepo.findById(1L)).thenReturn(testUser);
+        when(userRepo.findById(1L)).thenReturn(Optional.of(testUser));
 
         // Act
         LinemakersNameSurnameDTO result = unpublishedMatchesService.getLinemakersNameSurname("1");

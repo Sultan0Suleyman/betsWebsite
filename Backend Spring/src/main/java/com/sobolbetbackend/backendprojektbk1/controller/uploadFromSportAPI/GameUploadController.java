@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/api")
 public class GameUploadController {
-    private final String apiUrl = "http://127.0.0.1:5000/api/games";
+    private final String apiUrl = "http://host.docker.internal:5000/api/games";
     private final String gameNodeInJsonFile = "games";
     private final String elementOfTheLeagueInJsonFile = "strLeague";
     private final String elementOfTheHomeTeamInJsonFile = "strTeamHome";

@@ -23,8 +23,10 @@ public class AdminPasswordUpdateService {
 
     @Scheduled(fixedRate = 30*60*1000)
     public void updateAdminPassword(){
-        if(userRepo.existsById(1234567931L)){
-            UserE admin = userRepo.findById(1234567931);
+
+        UserE admin = userRepo.findByEmail("admin@system.com");
+
+        if(admin != null){
 
             String newRawPassword = adminPasswordService.generateRandomPassword(32);
             String encodedPassword = adminPasswordService.encodePassword(newRawPassword);
@@ -33,13 +35,14 @@ public class AdminPasswordUpdateService {
 
             admin.setPassword(encodedPassword);
             userRepo.save(admin);
-        }else{
+
+        } else {
             throw new UsernameNotFoundException("Admin not found");
         }
     }
 
     private void writePasswordToFile(String password){
-        try(FileWriter writer = new FileWriter("C:\\Users\\mrlen\\Desktop\\Admin_password.txt")){
+        try(FileWriter writer = new FileWriter("admin_password.txt")){
             writer.write(password);
         } catch (IOException e){
             e.printStackTrace();

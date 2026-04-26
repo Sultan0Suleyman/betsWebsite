@@ -121,7 +121,14 @@ public class FullBetService {
                     ordinaryBet.getOutcomeOfTheGame(),
                     ordinaryBet.getCoefficient(),
                     ordinaryBet.getWinningBet(),
-                    ordinaryBet.getGame().getGameEnded()));
+                    ordinaryBet.getGame().getGameEnded(),
+                    ordinaryBet.getGame().getScoreTeamHome(),
+                    ordinaryBet.getGame().getScoreTeamAway(),
+                    ordinaryBet.getGame().getExtraTimeHomeScore(),
+                    ordinaryBet.getGame().getExtraTimeAwayScore(),
+                    ordinaryBet.getGame().getPenaltyHomeScore(),
+                    ordinaryBet.getGame().getPenaltyAwayScore()
+            ));
         }
         return listOrdinary;
     }
@@ -196,5 +203,7 @@ public class FullBetService {
             fullBet.getPlayer().updateBalance(sellPrice);
         }
     }
+
+
 
 }

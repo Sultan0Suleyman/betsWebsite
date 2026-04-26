@@ -28,7 +28,7 @@ public class UserEService implements UserDetailsService {
         if(username.contains("@")) {
             user = userRepo.findByEmail(username);
         }else if(StringUtils.isNumeric(username)){
-            user = userRepo.findById(Long.parseLong(username));
+            user = userRepo.findById(Long.parseLong(username)).orElse(null);
         }else{
             throw new BadCredentialsException("Invalid username format: " + username);
         }

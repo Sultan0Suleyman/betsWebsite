@@ -11,6 +11,7 @@ import com.sobolbetbackend.backendprojektbk1.repository.Linemaker.BettingOddRepo
 import com.sobolbetbackend.backendprojektbk1.repository.authenticationRepos.UserRepo;
 import com.sobolbetbackend.backendprojektbk1.repository.mainEventsRepos.GameRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,26 +65,27 @@ public class UnpublishedMatchesService {
      * @return a list of {@link LinemakerMatchInfoDTO} objects representing all unpublished matches.
      *         Returns an empty list if no unpublished matches exist.
      */
-    public List<LinemakerMatchInfoDTO> getUnpublishedMatches(){
+    public List<LinemakerMatchInfoDTO> getUnpublishedMatches() {
         List<Game> unpublishedMatches = gameRepo.findByIsGamePosted(false);
-        List<LinemakerMatchInfoDTO> linemakerMatchInfoDTOS = new ArrayList<>();
-        for (Game game : unpublishedMatches) {
-            // Check for null before calling getName()
-            String countryName = game.getCountry() != null ? game.getCountry().getName() : null;
 
-            linemakerMatchInfoDTOS.add(new LinemakerMatchInfoDTO(
-                    game.getId().toString(),
-                    game.getSport().getName_en(),
-                    countryName,  // Can be null
-                    game.getLeague().getName(),
-                    game.getTeamHome().getName_en(),
-                    game.getTeamAway().getName_en(),
-                    game.getDateOfMatch().toString(),
-                    game.getStatus().toString(),
-                    game.getLinemakersName()
-            ));
-        }
-        return linemakerMatchInfoDTOS;
+        return unpublishedMatches.stream()
+                .filter(game -> !Boolean.TRUE.equals(game.getResultsProcessed()))
+                .map(game -> {
+                    String countryName = game.getCountry() != null ? game.getCountry().getName() : null;
+
+                    return new LinemakerMatchInfoDTO(
+                            game.getId().toString(),
+                            game.getSport().getName_en(),
+                            countryName,
+                            game.getLeague().getName(),
+                            game.getTeamHome().getName_en(),
+                            game.getTeamAway().getName_en(),
+                            game.getDateOfMatch().toString(),
+                            game.getStatus().toString(),
+                            game.getLinemakersName()
+                    );
+                })
+                .toList();
     }
 
     /**
@@ -97,7 +99,8 @@ public class UnpublishedMatchesService {
      * @throws NullPointerException if no user is found with the given ID
      */
     public LinemakersNameSurnameDTO getLinemakersNameSurname(String id){
-        UserE user = userRepo.findById(Long.parseLong(id));
+        UserE user = userRepo.findById(Long.parseLong(id))
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         return new LinemakersNameSurnameDTO(user.getName(),user.getSurname());
     }
 
@@ -201,6 +204,7 @@ public class UnpublishedMatchesService {
      * @throws IllegalArgumentException if no game is found with the specified match ID
      */
     @Transactional
+    @CacheEvict(cacheNames = {"sportsCache", "countriesCache", "leaguesCache"}, allEntries = true)
     public void saveOdds(SetOddsRequestDTO request) {
         Game game = gameRepo.findById(request.getMatchId())
                 .orElseThrow(() -> new IllegalArgumentException("Game not found with id: " + request.getMatchId()));
@@ -244,6 +248,7 @@ public class UnpublishedMatchesService {
      * @throws NullPointerException if the match has no associated BettingEvent
      */
     @Transactional
+    @CacheEvict(cacheNames = {"sportsCache", "countriesCache", "leaguesCache"}, allEntries = true)
     public void publishMatch(Long id) {
         Game match = gameRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Match not found with id: " + id));
@@ -267,6 +272,7 @@ public class UnpublishedMatchesService {
      * @throws NullPointerException if the match has no associated BettingEvent
      */
     @Transactional
+    @CacheEvict(cacheNames = {"sportsCache", "countriesCache", "leaguesCache"}, allEntries = true)
     public void unPublishMatch(Long id) {
         Game match = gameRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Match not found with id: " + id));

@@ -1,9 +1,13 @@
 package com.sobolbetbackend.backendprojektbk1.dto.betsInfo.betList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 public class OrdinaryBetDTO {
     private String teamHome;
     private String teamAway;
@@ -11,13 +15,30 @@ public class OrdinaryBetDTO {
     private String outcomeOfTheGame;
     private Double coefficient;
     private Boolean winningBet;
+
     @JsonProperty("isGameEnded")
     private boolean isGameEnded;
 
-    public OrdinaryBetDTO(String teamHome, String teamAway,
-                          LocalDateTime dateOfMatch, String outcomeOfTheGame,
-                          Double coefficient, Boolean winningBet,
-                          boolean isGameEnded) {
+    private Integer scoreHome;
+    private Integer scoreAway;
+    private Integer extraTimeHomeScore;
+    private Integer extraTimeAwayScore;
+    private Integer penaltyHomeScore;
+    private Integer penaltyAwayScore;
+
+    public OrdinaryBetDTO(String teamHome,
+                          String teamAway,
+                          LocalDateTime dateOfMatch,
+                          String outcomeOfTheGame,
+                          Double coefficient,
+                          Boolean winningBet,
+                          boolean isGameEnded,
+                          Integer scoreHome,
+                          Integer scoreAway,
+                          Integer extraTimeHomeScore,
+                          Integer extraTimeAwayScore,
+                          Integer penaltyHomeScore,
+                          Integer penaltyAwayScore) {
         this.teamHome = teamHome;
         this.teamAway = teamAway;
         this.dateOfMatch = dateOfMatch;
@@ -25,61 +46,11 @@ public class OrdinaryBetDTO {
         this.coefficient = coefficient;
         this.winningBet = winningBet;
         this.isGameEnded = isGameEnded;
-    }
-
-    public String getTeamHome() {
-        return teamHome;
-    }
-
-    public void setTeamHome(String teamHome) {
-        this.teamHome = teamHome;
-    }
-
-    public String getTeamAway() {
-        return teamAway;
-    }
-
-    public void setTeamAway(String teamAway) {
-        this.teamAway = teamAway;
-    }
-
-    public LocalDateTime getDateOfMatch() {
-        return dateOfMatch;
-    }
-
-    public void setDateOfMatch(LocalDateTime dateOfMatch) {
-        this.dateOfMatch = dateOfMatch;
-    }
-
-    public String getOutcomeOfTheGame() {
-        return outcomeOfTheGame;
-    }
-
-    public void setOutcomeOfTheGame(String outcomeOfTheGame) {
-        this.outcomeOfTheGame = outcomeOfTheGame;
-    }
-
-    public Double getCoefficient() {
-        return coefficient;
-    }
-
-    public void setCoefficient(Double coefficient) {
-        this.coefficient = coefficient;
-    }
-
-    public Boolean getWinningBet() {
-        return winningBet;
-    }
-
-    public void setWinningBet(Boolean winningBet) {
-        this.winningBet = winningBet;
-    }
-
-    public boolean getGameEnded() {
-        return isGameEnded;
-    }
-
-    public void setGameEnded(boolean gameEnded) {
-        isGameEnded = gameEnded;
+        this.scoreHome = scoreHome;
+        this.scoreAway = scoreAway;
+        this.extraTimeHomeScore = extraTimeHomeScore;
+        this.extraTimeAwayScore = extraTimeAwayScore;
+        this.penaltyHomeScore = penaltyHomeScore;
+        this.penaltyAwayScore = penaltyAwayScore;
     }
 }

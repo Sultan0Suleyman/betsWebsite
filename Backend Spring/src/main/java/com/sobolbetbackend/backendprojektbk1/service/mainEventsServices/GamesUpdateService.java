@@ -87,18 +87,22 @@ public class GamesUpdateService {
                                 }
                             }
 
+                            final Country finalCountryEntity = countryEntity;
+
                             Sport sportEntity = sportRepo.findById(strSport)
                                     .orElseThrow(() -> new NoSuchElementException(
                                             "Sport not found with id: " + strSport));
-                            League leagueEntity = leagueRepo.findById(strLeague)
-                                    .orElseThrow(() -> new NoSuchElementException(
-                                            "League not found with id: " + strLeague));
-                            Team teamHomeEntity = teamRepo.findById(strTeamHome)
-                                            .orElseThrow(() -> new NoSuchElementException(
-                                                    "Team not found with id: " + strTeamHome));
-                            Team teamAwayEntity = teamRepo.findById(strTeamAway)
-                                    .orElseThrow(() -> new NoSuchElementException(
-                                            "Team not found with id: " + strTeamAway));
+                            League leagueEntity = leagueRepo.findById(strLeague).orElseGet(() ->
+                                    leagueRepo.save(new League(strLeague, finalCountryEntity, sportEntity))
+                            );
+
+                            Team teamHomeEntity = teamRepo.findById(strTeamHome).orElseGet(() ->
+                                    teamRepo.save(new Team(strTeamHome, leagueEntity, sportEntity, finalCountryEntity))
+                            );
+
+                            Team teamAwayEntity = teamRepo.findById(strTeamAway).orElseGet(() ->
+                                    teamRepo.save(new Team(strTeamAway, leagueEntity, sportEntity, finalCountryEntity))
+                            );
 
                             listOfGames.add(new Game(teamHomeEntity,teamAwayEntity,dateOfMatch,
                                     leagueEntity,sportEntity,countryEntity));
