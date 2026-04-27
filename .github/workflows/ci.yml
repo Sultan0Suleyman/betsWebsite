@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    name: Build frontend, backend and Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download repository code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js for Angular
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install frontend dependencies
+        working-directory: ./Frontend Angular
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./Frontend Angular
+        run: npm run build
+
+      - name: Setup Java for Spring Boot
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build backend without tests
+        working-directory: ./Backend Spring
+        run: mvn clean package -DskipTests
+
+      - name: Build Docker containers
+        run: docker compose build
