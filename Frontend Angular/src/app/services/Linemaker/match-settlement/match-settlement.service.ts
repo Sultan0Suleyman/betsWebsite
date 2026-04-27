@@ -6,12 +6,13 @@ import { SettlementMatch } from './models/settlement-match.model';
 import { FinishGameRequest } from './models/finish-game-request.model';
 import { BetCalculationResult } from './models/bet-calculation-result.model';
 import { RefundResult } from './models/refund-result.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MatchSettlementService {
-  private readonly baseUrl = 'http://localhost:8080/linemaker/settlement';
+  private readonly baseUrl = `${environment.apiUrl}/linemaker/settlement`;
 
   constructor(private http: HttpClient) {}
 

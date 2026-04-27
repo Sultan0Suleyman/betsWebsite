@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 interface MatchDetails {
   id: number;
@@ -31,6 +32,8 @@ interface OddsData {
 })
 
 export class LinemakerSetOddsMatchComponent implements OnInit {
+  private readonly baseUrl = environment.apiUrl;
+
   @Input() matchId!: number;
   @Output() backToList = new EventEmitter<void>();
 
@@ -61,7 +64,7 @@ export class LinemakerSetOddsMatchComponent implements OnInit {
 
   loadMatchDetails(): void {
     this.isLoading = true;
-    this.http.get<MatchDetails>(`http://localhost:8080/linemaker/unpublished-match-odds-details/${this.matchId}`)
+    this.http.get<MatchDetails>(`${this.baseUrl}/linemaker/unpublished-match-odds-details/${this.matchId}`)
       .subscribe({
         next: (data) => {
           this.matchDetails = data;
@@ -90,7 +93,7 @@ export class LinemakerSetOddsMatchComponent implements OnInit {
       odds: this.oddsData
     };
 
-    this.http.post('http://localhost:8080/linemaker/set-odds', oddsPayload)
+    this.http.post(`${this.baseUrl}/linemaker/set-odds`, oddsPayload)
       .subscribe({
         next: () => {
           this.isSaving = false; // ✅ ДОБАВЬТЕ ЭТУ СТРОКУ
@@ -144,8 +147,8 @@ export class LinemakerSetOddsMatchComponent implements OnInit {
     this.isSaving = true;
 
     const url = this.isPublished
-      ? `http://localhost:8080/linemaker/unpublish-match/${this.matchId}`
-      : `http://localhost:8080/linemaker/publish-match/${this.matchId}`;
+      ? `${this.baseUrl}/linemaker/unpublish-match/${this.matchId}`
+      : `${this.baseUrl}/linemaker/publish-match/${this.matchId}`;
     if(!this.isPublished) this.saveOdds()
     this.http.post(url, {}).subscribe({
       next: () => {

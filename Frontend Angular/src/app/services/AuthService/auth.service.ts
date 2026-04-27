@@ -4,6 +4,7 @@ import { catchError, map } from 'rxjs/operators';
 import { JwtDecodeService } from '../JwtDecodeService/jwt-decode.service';
 import {ActivationStart, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +16,12 @@ export class AuthService {
   private cachedNameSurname: { firstName: string; lastName: string } | null = null;
 
 
-  private readonly loginUrl = 'http://localhost:8080/login-endpoint';
-  private readonly refreshAccessTokenUrl = 'http://localhost:8080/jwt-refresh-token-logic/refresh-access-token-endpoint';
-  private readonly refreshRefreshTokenUrl = 'http://localhost:8080/jwt-refresh-token-logic/check-refresh-token-endpoint';
-  private readonly revokeRefreshTokenUrl = 'http://localhost:8080/jwt-refresh-token-logic/revoke-refresh-token-endpoint';
+  private readonly baseUrl = environment.apiUrl;
+
+  private readonly loginUrl = `${this.baseUrl}/login-endpoint`;
+  private readonly refreshAccessTokenUrl = `${this.baseUrl}/jwt-refresh-token-logic/refresh-access-token-endpoint`;
+  private readonly refreshRefreshTokenUrl = `${this.baseUrl}/jwt-refresh-token-logic/check-refresh-token-endpoint`;
+  private readonly revokeRefreshTokenUrl = `${this.baseUrl}/jwt-refresh-token-logic/revoke-refresh-token-endpoint`;
 
 
   constructor(
@@ -56,7 +59,7 @@ export class AuthService {
           }
         }
       }
-     }, 16*60*1000); // проверка каждые 16 минут
+    }, 16*60*1000); // проверка каждые 16 минут
 
   }
   public login(credentials: { username: string; password: string }): Observable<any> {
@@ -160,7 +163,7 @@ export class AuthService {
     const checkRefreshToken = localStorage.getItem('refreshToken');
     if (checkRefreshToken) {//revoke refresh token
       this.http.post(this.revokeRefreshTokenUrl, {}).pipe()
-      .subscribe();
+        .subscribe();
     }
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('dateOfLogout');
@@ -211,7 +214,7 @@ export class AuthService {
     // делаем запрос на бэк
     return this.http
       .get<{ firstName: string; lastName: string }>(
-        'http://localhost:8080/linemaker/me',
+        `${this.baseUrl}/linemaker/me`,
         { params: { username } }
       )
       .pipe(

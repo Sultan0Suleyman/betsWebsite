@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {CouponService} from "../../../services/CouponService/coupon.service";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-full-game-content',
@@ -8,6 +9,8 @@ import {CouponService} from "../../../services/CouponService/coupon.service";
   styleUrls: ['./full-game-content.component.css']
 })
 export class FullGameContentComponent implements OnInit{
+  private readonly baseUrl = environment.apiUrl;
+
   @Input() selectedGameId: number = 0
   gameBetsData: any
 
@@ -20,7 +23,7 @@ export class FullGameContentComponent implements OnInit{
 
   getDataFromBackend() {
     // Формирование URL с использованием выбранных параметров
-    const apiUrl = `http://localhost:8080/list/gameBets/${this.selectedGameId}`;
+    const apiUrl = `${this.baseUrl}/list/gameBets/${this.selectedGameId}`;
 
     // Выполнение GET-запроса
     this.http.get(apiUrl).subscribe({
@@ -33,7 +36,7 @@ export class FullGameContentComponent implements OnInit{
         // Обработка ошибок
         console.error(error);
       }
-  });
+    });
   }
 
 

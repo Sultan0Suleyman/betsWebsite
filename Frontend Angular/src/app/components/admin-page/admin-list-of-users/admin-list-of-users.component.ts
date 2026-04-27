@@ -5,6 +5,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ViewUserInfoComponent} from "./view-user-info/view-user-info.component";
 import {HttpClient} from "@angular/common/http";
 import { UserDetailsResponse } from '../models/user-info';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -15,6 +16,7 @@ import { UserDetailsResponse } from '../models/user-info';
 
 export class AdminListOfUsersComponent implements OnInit {
   users: User[] = []; // Список пользователей
+  private readonly baseUrl = environment.apiUrl;
 
   constructor(private userService: UserService,
               private dialog: MatDialog,
@@ -69,7 +71,7 @@ export class AdminListOfUsersComponent implements OnInit {
 
   // Метод для просмотра информации
   viewUserDetails(userId: number): void {
-    this.http.get<UserDetailsResponse>(`http://localhost:8080/admin/user/info/${userId}`).subscribe({
+    this.http.get<UserDetailsResponse>(`${this.baseUrl}/admin/user/info/${userId}`).subscribe({
       next:(data) =>{
         console.log(data)
         this.dialog.open(ViewUserInfoComponent, {

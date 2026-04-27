@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../../services/AuthService/auth.service";
 import {HttpClient} from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-top-up-page',
@@ -8,7 +9,7 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./top-up-page.component.css']
 })
 export class TopUpPageComponent implements OnInit {
-  private apiUrl = 'http://localhost:8080/payment';
+  private apiUrl = `${environment.apiUrl}/payment`;
   selectedPaymentMethod!: string
   paymentMethods!: string[]
   amount: number | undefined
@@ -99,5 +100,5 @@ export class TopUpPageComponent implements OnInit {
         }
       });
     }
-    }
+  }
 }

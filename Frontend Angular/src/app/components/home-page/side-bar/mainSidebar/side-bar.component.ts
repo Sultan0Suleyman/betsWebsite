@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnChanges, OnInit, Output} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-side-bar',
@@ -8,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SideBarComponent implements OnInit{
   @Output() countrySportSelected: EventEmitter<{ country: string, sport: string, league: string }> = new EventEmitter();
+  private readonly baseUrl = environment.apiUrl;
 
   listOfSports: string[] = [];
   selectedSport: string = '';
@@ -21,56 +23,56 @@ export class SideBarComponent implements OnInit{
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    // Fetch data from the backend
-    this.http.get<string[]>('http://localhost:8080/list/sports').subscribe({
-      next:(data: string[]) => {
-        this.listOfSports = data
+    this.http.get<string[]>(`${this.baseUrl}/list/sports`).subscribe({
+      next: (data: string[]) => {
+        this.listOfSports = data;
       },
-      error:(error) => {
+      error: (error) => {
         console.error('Error fetching sports:', error);
       }
-  });
+    });
   }
 
   onSportClick(sport: string) {
-    // Toggle the selected sport
-    this.noMatchesMessage = ''
+    this.noMatchesMessage = '';
     this.selectedSport = (this.selectedSport === sport) ? '' : sport;
-    this.selectedCountry = ''; // Reset selected country
-    this.selectedLeague = ''; // Reset selected league
-    // Fetch countries for the selected sport
+    this.selectedCountry = '';
+    this.selectedLeague = '';
+
     if (!this.listOfCountries[sport]) {
-      this.http.get<string[]>(`http://localhost:8080/list/countries/${sport}`).subscribe({
-        next:(data: string[]) => {
-          this.listOfCountries[sport] = data
-          if(data.length===0)this.noMatchesMessage = "There are no upcoming matches in this sport"
+      this.http.get<string[]>(`${this.baseUrl}/list/countries/${sport}`).subscribe({
+        next: (data: string[]) => {
+          this.listOfCountries[sport] = data;
+          if (data.length === 0) {
+            this.noMatchesMessage = "There are no upcoming matches in this sport";
+          }
         },
-        error:(error) => {
+        error: (error) => {
           console.error('Error fetching countries:', error);
         }
-    });
+      });
     }
   }
 
   onCountryClick(country: string, sport: string) {
     this.selectedCountry = (this.selectedCountry === country) ? '' : country;
-    this.selectedLeague = ''; // Reset selected league
-    // Fetch leagues for the selected country and sport
+    this.selectedLeague = '';
+
     if (!this.listOfLeagues[`${country}-${sport}`]) {
-      this.http.get<string[]>(`http://localhost:8080/list/leagues/${sport}/${country}`).subscribe({
-        next:(data: string[]) => {
-          if(data===null){
-            this.onLeagueClick(country,'null',sport)
-            this.shouldShowArrow = false
-          }else{
-            this.shouldShowArrow = true
-            this.listOfLeagues[`${country}-${sport}`] = data
+      this.http.get<string[]>(`${this.baseUrl}/list/leagues/${sport}/${country}`).subscribe({
+        next: (data: string[]) => {
+          if (data === null) {
+            this.onLeagueClick(country, 'null', sport);
+            this.shouldShowArrow = false;
+          } else {
+            this.shouldShowArrow = true;
+            this.listOfLeagues[`${country}-${sport}`] = data;
           }
         },
-        error:(error) => {
-          console.error('Error fetching leagues:', error)
+        error: (error) => {
+          console.error('Error fetching leagues:', error);
         }
-    });
+      });
     }
   }
 

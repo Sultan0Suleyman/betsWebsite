@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { AuthService } from "../../../../services/AuthService/auth.service";
 import { HttpClient } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-main-green-nav-bar',
@@ -8,6 +9,8 @@ import { HttpClient } from "@angular/common/http";
   styleUrls: ['./main-green-nav-bar.component.css']
 })
 export class MainGreenNavBarComponent implements OnInit{
+  private readonly baseUrl = environment.apiUrl;
+
   @Output() betHistoryClicked: EventEmitter<void> = new EventEmitter<void>()
 
   playerId: number = 0
@@ -15,7 +18,7 @@ export class MainGreenNavBarComponent implements OnInit{
 
   constructor(public authService: AuthService,
               private http:HttpClient
-              ) {
+  ) {
   }
 
   ngOnInit(): void {
@@ -27,7 +30,7 @@ export class MainGreenNavBarComponent implements OnInit{
 
   getPlayerBalanceFromBackend(){
     console.log("Request to get PlayerBalance")
-    const apiUrl = `http://localhost:8080/player/data/balance/${this.playerId}`
+    const apiUrl = `${this.baseUrl}/player/data/balance/${this.playerId}`
     // Выполнение GET-запроса
     this.http.get<number>(apiUrl).subscribe({
       next: (data: number) => {
@@ -41,6 +44,7 @@ export class MainGreenNavBarComponent implements OnInit{
       }
     });
   }
+
   refreshBalance() {
     this.getPlayerBalanceFromBackend()
     const refreshButton = document.querySelector('.refresh-button')

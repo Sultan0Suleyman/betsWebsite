@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../../services/AuthService/auth.service";
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-withdraw-page',
@@ -8,7 +9,7 @@ import {AuthService} from "../../../services/AuthService/auth.service";
   styleUrls: ['./withdraw-page.component.css']
 })
 export class WithdrawPageComponent implements OnInit{
-  private apiUrl = 'http://localhost:8080/payment'
+  private apiUrl = `${environment.apiUrl}/payment`;
   amount: number | undefined
   selectedPaymentMethod!: string
   userId = this.authService.getCurrentUser().value.username

@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 import {HttpClient} from "@angular/common/http";
 import {ValidationService} from "../../../services/ValidationService/validation.service";
 import {limitInputLength} from "../../../utils/form.utils";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin-worker-registration',
@@ -10,6 +11,8 @@ import {limitInputLength} from "../../../utils/form.utils";
   styleUrls: ['./admin-worker-registration.component.css']
 })
 export class AdminWorkerRegistrationComponent {
+  private readonly baseUrl = environment.apiUrl;
+
   myForm: FormGroup = new FormGroup({
 
   })
@@ -72,7 +75,7 @@ export class AdminWorkerRegistrationComponent {
   }
 
   sendDataToBackend(formData: any) {
-    this.http.post('http://localhost:8080/admin/worker-registration',formData)
+    this.http.post(`${this.baseUrl}/admin/worker-registration`,formData)
       .subscribe({next:(response: any) => {
           this.submissionMessage = response.message // извлекаем сообщение об успешной регистрации из ответа или используем стандартное сообщение
         }, error:(error) => {
@@ -89,6 +92,4 @@ export class AdminWorkerRegistrationComponent {
   removeContract() {
     this.contract = null;
   }
-
-
 }

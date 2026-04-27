@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {limitInputLength} from "../../../utils/form.utils";
 import {ValidationService} from "../../../services/ValidationService/validation.service";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-registration-page',
@@ -12,6 +13,8 @@ import {ValidationService} from "../../../services/ValidationService/validation.
   styleUrls: ['./registration-page.component.css']
 })
 export class RegistrationPageComponent {
+  private readonly baseUrl = environment.apiUrl;
+
   currentDate = new Date()
   submissionMessage:String = ''
   myForm: FormGroup = new FormGroup({
@@ -34,21 +37,21 @@ export class RegistrationPageComponent {
 
       if (formData.password !== undefined) {
         // Если пароль не равен undefined, отправляем форму
-        this.http.post('http://localhost:8080/players', formData)
+        this.http.post(`${this.baseUrl}/players`, formData)
           .subscribe({next:(response: any) => {
-            console.log('Form data sent successfully!', response)
-            this.submissionMessage = response.message  // извлекаем сообщение об успешной регистрации из ответа или используем стандартное сообщение
+              console.log('Form data sent successfully!', response)
+              this.submissionMessage = response.message  // извлекаем сообщение об успешной регистрации из ответа или используем стандартное сообщение
               setTimeout(() => {
                 this.router.navigate(['/home/login']);
               }, 5000)
-          }, error:(error) => {
-            console.error('Error occurred while sending form data:', error)
-            if (error.error && error.error.error) {
-              this.submissionMessage = error.error.error // извлекаем сообщение об ошибке из ответа
-            } else {
-              this.submissionMessage = 'An error occurred on the server.' // используем стандартное сообщение об ошибке
-            }
-          }})
+            }, error:(error) => {
+              console.error('Error occurred while sending form data:', error)
+              if (error.error && error.error.error) {
+                this.submissionMessage = error.error.error // извлекаем сообщение об ошибке из ответа
+              } else {
+                this.submissionMessage = 'An error occurred on the server.' // используем стандартное сообщение об ошибке
+              }
+            }})
       }
     }
   }
@@ -75,4 +78,3 @@ export class RegistrationPageComponent {
   }
 
 }
-

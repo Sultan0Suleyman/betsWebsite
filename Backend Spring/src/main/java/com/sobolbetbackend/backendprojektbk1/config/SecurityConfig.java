@@ -73,7 +73,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedOrigins(List.of("http://localhost:4200", "https://sobolbet-frontend.onrender.com"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS","PUT","PATCH","DELETE"));
         configuration.addAllowedHeader("*"); // Разрешить все заголовки
         configuration.setExposedHeaders(List.of("*")); // Добавьте эту строку

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {HttpClient} from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 // Interfaces based on your backend entities
 interface Country {
@@ -30,6 +31,8 @@ interface Team {
   styleUrls: ['./linemaker-create-match.component.css']
 })
 export class LinemakerCreateMatchComponent implements OnInit{
+  private readonly baseUrl = environment.apiUrl;
+
   createMatchForm: FormGroup;
 
   // Data arrays - in real app would come from backend
@@ -69,7 +72,7 @@ export class LinemakerCreateMatchComponent implements OnInit{
   private loadInitialData(): void {
     this.isLoading = true;
 
-    this.http.get<string[]>('http://localhost:8080/linemaker/list/countries').subscribe({
+    this.http.get<string[]>(`${this.baseUrl}/linemaker/list/countries`).subscribe({
       next: (data) => {
         this.countries = data.map(country => ({ name_en: country }));
         this.isLoading = false;
@@ -81,7 +84,7 @@ export class LinemakerCreateMatchComponent implements OnInit{
       }
     });
 
-    this.http.get<string[]>('http://localhost:8080/list/sports').subscribe({
+    this.http.get<string[]>(`${this.baseUrl}/list/sports`).subscribe({
       next: (data) => {
         this.sports = data.map(sport => ({ name_en: sport }));
         this.isLoading = false;
@@ -144,7 +147,7 @@ export class LinemakerCreateMatchComponent implements OnInit{
   }
 
   private loadTeams(league: string): void {
-    this.http.get<string[]>(`http://localhost:8080/linemaker/list/teams/${league}`).subscribe({
+    this.http.get<string[]>(`${this.baseUrl}/linemaker/list/teams/${league}`).subscribe({
       next: (data) => {
         // Получаем текущие выбранные значения спорта и страны
         const selectedSport = this.createMatchForm.get('sport')?.value;
@@ -191,7 +194,7 @@ export class LinemakerCreateMatchComponent implements OnInit{
     this.isLoading = true;
 
     // если страна не выбрана → передаем пустую строку
-    const url = `http://localhost:8080/linemaker/list/leagues/${sport}/${country || null}`;
+    const url = `${this.baseUrl}/linemaker/list/leagues/${sport}/${country || null}`;
 
     this.http.get<string[]>(url).subscribe({
       next: (data) => {
@@ -264,7 +267,7 @@ export class LinemakerCreateMatchComponent implements OnInit{
         dateOfMatch: matchDateTime
       };
 
-      this.http.post('http://localhost:8080/linemaker/create-match', matchData, { responseType: 'text' }).subscribe({
+      this.http.post(`${this.baseUrl}/linemaker/create-match`, matchData, { responseType: 'text' }).subscribe({
         next: (response) => {
           // response — это строка (сообщение с бэка)
           console.log('Match created successfully:', response);

@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {AuthService} from "../../../services/AuthService/auth.service";
+import { environment } from 'src/environments/environment';
 
 interface UnpublishedMatch {
   id?: number;
@@ -27,6 +28,8 @@ interface UnpublishedMatch {
 })
 
 export class LinemakerUnpublishedMatchesComponent implements OnInit {
+  private readonly baseUrl = environment.apiUrl;
+
   @Output() setOddsRequested = new EventEmitter<number>();
 
   unpublishedMatches: UnpublishedMatch[] = [];
@@ -53,7 +56,7 @@ export class LinemakerUnpublishedMatchesComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.http.get<UnpublishedMatch[]>('http://localhost:8080/linemaker/unpublished-matches')
+    this.http.get<UnpublishedMatch[]>(`${this.baseUrl}/linemaker/unpublished-matches`)
       .subscribe({
         next: (data) => {
           // ensure defaults for status/initials to avoid TS/runtime issues
@@ -80,7 +83,7 @@ export class LinemakerUnpublishedMatchesComponent implements OnInit {
   publishMatch(index: number): void {
     if (!confirm('Are you sure you want to publish this match?')) return;
     const match = this.unpublishedMatches[index];
-    this.http.post('http://localhost:8080/linemaker/publish-match', match)
+    this.http.post(`${this.baseUrl}/linemaker/publish-match`, match)
       .subscribe({
         next: () => {
           this.unpublishedMatches.splice(index, 1);
@@ -110,7 +113,7 @@ export class LinemakerUnpublishedMatchesComponent implements OnInit {
       return;
     }
 
-    this.http.delete(`http://localhost:8080/linemaker/delete-match/${match.id}`)
+    this.http.delete(`${this.baseUrl}/linemaker/delete-match/${match.id}`)
       .subscribe({
         next: () => {
           // удаляем из оригинального массива по id
@@ -205,7 +208,7 @@ export class LinemakerUnpublishedMatchesComponent implements OnInit {
         linemakersName: match.linemakersName
       };
 
-      this.http.patch('http://localhost:8080/linemaker/match-status', body)
+      this.http.patch(`${this.baseUrl}/linemaker/match-status`, body)
         .subscribe({
           error: err => {
             console.error('Failed to update match status:', err);

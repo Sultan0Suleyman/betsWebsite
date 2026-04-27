@@ -6,6 +6,7 @@ import {
 import {CouponService} from "../../../services/CouponService/coupon.service";
 import {AuthService} from "../../../services/AuthService/auth.service";
 import {HttpClient} from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-coupon-bets-dialog',
@@ -13,7 +14,7 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./coupon-bets-dialog.component.css']
 })
 export class CouponBetsDialogComponent implements OnInit,DoCheck,OnDestroy {
-  private apiUrl = 'http://localhost:8080/bet';
+  private apiUrl = `${environment.apiUrl}/bet`;
 
   couponBets: any[] = []
   message: string = ""
@@ -76,7 +77,7 @@ export class CouponBetsDialogComponent implements OnInit,DoCheck,OnDestroy {
     } else {
       this.errorMessage="You have to authorise"
     }
-}
+  }
 
   public calculateTotalOddsAndPossibleWin(): void {
     if (this.couponBets.length > 0) {

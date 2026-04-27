@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../../services/AuthService/auth.service";
+import { environment } from 'src/environments/environment';
 
 interface LineMatch {
   id?: number;
@@ -26,6 +27,8 @@ interface LineMatch {
   styleUrls: ['./linemaker-line-matches.component.css']
 })
 export class LinemakerLineMatchesComponent implements OnInit {
+  private readonly baseUrl = environment.apiUrl;
+
   @Output() manageMatchRequested = new EventEmitter<number>();
 
   lineMatches: LineMatch[] = [];
@@ -52,7 +55,7 @@ export class LinemakerLineMatchesComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.http.get<LineMatch[]>('http://localhost:8080/linemaker/line-matches')
+    this.http.get<LineMatch[]>(`${this.baseUrl}/linemaker/line-matches`)
       .subscribe({
         next: (data) => {
           // ensure defaults for status/initials to avoid TS/runtime issues
@@ -79,7 +82,7 @@ export class LinemakerLineMatchesComponent implements OnInit {
   publishMatch(index: number): void {
     if (!confirm('Are you sure you want to publish this match?')) return;
     const match = this.lineMatches[index];
-    this.http.post('http://localhost:8080/linemaker/publish-match', match)
+    this.http.post(`${this.baseUrl}/linemaker/publish-match`, match)
       .subscribe({
         next: () => {
           this.lineMatches.splice(index, 1);
@@ -181,7 +184,7 @@ export class LinemakerLineMatchesComponent implements OnInit {
         linemakersName: match.linemakersName
       };
 
-      this.http.patch('http://localhost:8080/linemaker/match-status', body)
+      this.http.patch(`${this.baseUrl}/linemaker/match-status`, body)
         .subscribe({
           error: err => {
             console.error('Failed to update match status:', err);

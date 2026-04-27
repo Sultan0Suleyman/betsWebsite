@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {User} from "../../models/user";
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrlGetAllUsers = 'http://localhost:8080/admin/list/users'; // URL вашего API
-  private apiUrlDeleteUser = 'http://localhost:8080/admin/delete'
+  private apiUrlGetAllUsers = `${environment.apiUrl}/admin/list/users`; // URL вашего API
+  private apiUrlDeleteUser = `${environment.apiUrl}/admin/delete`
 
   constructor(private http: HttpClient) { }
 

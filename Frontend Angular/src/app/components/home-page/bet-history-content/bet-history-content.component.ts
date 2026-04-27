@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 interface FullBet {
   id: number;
@@ -16,6 +17,8 @@ interface FullBet {
   styleUrls: ['./bet-history-content.component.css']
 })
 export class BetHistoryContentComponent implements OnInit {
+  private readonly baseUrl = environment.apiUrl;
+
   @Input() userId: number = 0
   unsettledBets: FullBet[] = []
   paidBets: FullBet[] = []
@@ -34,7 +37,7 @@ export class BetHistoryContentComponent implements OnInit {
   }
 
   getBetsFromBackend() {
-    const apiUrl = `http://localhost:8080/bet/list/fullBet/${this.userId}`;
+    const apiUrl = `${this.baseUrl}/bet/list/fullBet/${this.userId}`;
 
     this.http.get<FullBet[]>(apiUrl).subscribe({
       next: (response) => {
@@ -59,7 +62,7 @@ export class BetHistoryContentComponent implements OnInit {
   }
 
   onBetClick(fullBetId: number, betAmount?: number) {
-    const apiUrl = `http://localhost:8080/bet/list/ordinaryBets/${fullBetId}`;
+    const apiUrl = `${this.baseUrl}/bet/list/ordinaryBets/${fullBetId}`;
     this.isBetClicked = !this.isBetClicked
 
     if (this.selectedBet !== fullBetId || this.isBetClicked) {
@@ -113,7 +116,7 @@ export class BetHistoryContentComponent implements OnInit {
           this.ordinaryBets = response;
 
           // Запросить актуальную цену продажи с бэкенда
-          this.http.get<number>(`http://localhost:8080/bet/sell-price/${fullBetId}`).subscribe({
+          this.http.get<number>(`${this.baseUrl}/bet/sell-price/${fullBetId}`).subscribe({
             next: (sellPrice) => {
               this.sellButtonMessage = `Sell for ${sellPrice.toFixed(2)}€`;
               console.log('Sell price from backend:', sellPrice);
@@ -151,7 +154,7 @@ export class BetHistoryContentComponent implements OnInit {
   }
 
   onSellButtonClick(fullBetId: number): void {
-    const apiUrl = `http://localhost:8080/bet/sell`;
+    const apiUrl = `${this.baseUrl}/bet/sell`;
     const confirmed = window.confirm('Are you sure, that you want to sell a bet?')
 
     if (confirmed) {

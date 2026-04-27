@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {HttpClient} from "@angular/common/http";
 import {Router} from '@angular/router';
 import {CouponService} from "../../../services/CouponService/coupon.service";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-leagues-matches-content',
@@ -9,6 +10,8 @@ import {CouponService} from "../../../services/CouponService/coupon.service";
   styleUrls: ['./leagues-matches-content.component.css']
 })
 export class LeaguesMatchesContentComponent implements OnChanges {
+  private readonly baseUrl = environment.apiUrl;
+
   @Input() selectedCountry: string = '';
   @Input() selectedSport: string = '';
   @Input() selectedLeague: string = '';
@@ -33,7 +36,7 @@ export class LeaguesMatchesContentComponent implements OnChanges {
 
   getDataFromBackend() {
     // Формирование URL с использованием выбранных параметров
-    const apiUrl = `http://localhost:8080/list/games/${this.selectedSport}/${this.selectedCountry}/${this.selectedLeague}`;
+    const apiUrl = `${this.baseUrl}/list/games/${this.selectedSport}/${this.selectedCountry}/${this.selectedLeague}`;
 
     // Выполнение GET-запроса
     this.http.get(apiUrl).subscribe({
