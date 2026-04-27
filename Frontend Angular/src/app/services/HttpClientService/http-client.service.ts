@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError, switchMap, map } from "rxjs/operators";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpClientService {
-  private readonly defaultUrl = "http://localhost:8080"
+  private readonly defaultUrl = environment.apiUrl;
   csrfToken: string = ""
 
   constructor(private http: HttpClient) { }
