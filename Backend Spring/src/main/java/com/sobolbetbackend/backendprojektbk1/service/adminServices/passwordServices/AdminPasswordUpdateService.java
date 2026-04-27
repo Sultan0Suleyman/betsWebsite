@@ -42,6 +42,8 @@ public class AdminPasswordUpdateService {
     }
 
     private void writePasswordToFile(String password){
+        System.out.println("🔥 NEW ADMIN PASSWORD: " + password);
+
         try(FileWriter writer = new FileWriter("admin_password.txt")){
             writer.write(password);
         } catch (IOException e){
