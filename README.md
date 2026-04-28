@@ -164,7 +164,7 @@ MySQL (Railway)
 
 ### 🛠️ Admin Panel
 
-![Admin](Screenshots/AdminPage.png)
+![Admin](Screenshots/AdminPage1.png)
 
 ---
 
