@@ -210,7 +210,7 @@ This project demonstrates:
 ## 📬 Contact
 
 GitHub: https://github.com/Sultan0Suleyman
-Email: YOUR_EMAIL
+Email: oleh.sobol@tu-dortmund.de
 
 ---
 
