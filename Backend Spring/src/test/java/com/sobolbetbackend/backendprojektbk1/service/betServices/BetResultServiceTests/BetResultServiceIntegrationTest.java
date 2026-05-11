@@ -15,16 +15,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
+@DataJpaTest
+@Import(BetResultService.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 @Transactional
 @DisplayName("BetResultService Integration Tests")
@@ -199,9 +201,9 @@ class BetResultServiceIntegrationTest {
         FullBet bet12 = createFullBet(100.0, 1.8);
         FullBet bet2X = createFullBet(100.0, 2.0);
 
-        createOrdinaryBet(testGame, bet1X, "1X", 1.5); // Should win (home win or draw)
+        createOrdinaryBet(testGame, bet1X, "X1", 1.5); // Should win (home win or draw)
         createOrdinaryBet(testGame, bet12, "12", 1.8); // Should win (any team wins)
-        createOrdinaryBet(testGame, bet2X, "2X", 2.0); // Should lose (away win or draw)
+        createOrdinaryBet(testGame, bet2X, "X2", 2.0); // Should lose (away win or draw)
 
         // When
         BetCalculationResultDTO result = betResultService.processGameResult(testGame.getId());
@@ -279,7 +281,7 @@ class BetResultServiceIntegrationTest {
         testGame.setScoreTeamAway(1);
         testGame.setExtraTimeHomeScore(0);
         testGame.setExtraTimeAwayScore(1);
-        testGame.setPenaltyHomeScore(4);
+        testGame.setPenaltyHomeScore(5);
         testGame.setPenaltyAwayScore(3);
         testGame = gameRepo.save(testGame);
 
@@ -303,6 +305,7 @@ class BetResultServiceIntegrationTest {
         fullBet.setPlayer(testPlayer);
         fullBet.setBetAmount(amount);
         fullBet.setFinalCoefficient(coefficient);
+        fullBet.setBets(new ArrayList<>());
         return fullBetRepo.save(fullBet);
     }
 
@@ -315,10 +318,9 @@ class BetResultServiceIntegrationTest {
 
         // Update the fullBet's bets list
         if (fullBet.getBets() == null) {
-            fullBet.setBets(Arrays.asList(bet));
-        } else {
-            fullBet.getBets().add(bet);
+            fullBet.setBets(new ArrayList<>());
         }
+        fullBet.getBets().add(bet);
 
         return ordinaryBetRepo.save(bet);
     }
